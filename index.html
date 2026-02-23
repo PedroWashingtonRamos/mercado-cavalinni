@@ -3,262 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WL System | Estratégia Cavallini</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <title>WL System Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --c0: #f5f5f7; --c1: #d2e3fc; --c2: #fce4ec; --c3: #e8f5e9; --c4: #fef3c7; --c5: #e0e0e0; --c6: #1d1d1f;
+            --bg: #fbfbfd;
+            --card-bg: #ffffff;
+            --text-main: #1d1d1f;
+            --text-sub: #86868b;
             --accent: #0071e3;
+            --card-w: clamp(300px, 85vw, 400px);
+            --card-h: clamp(500px, 75vh, 650px);
         }
 
-        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
         
         body { 
-            width: 100vw; height: 100vh; 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--c0); 
-            transition: background-color 0.8s ease; 
-            overflow: hidden; 
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .progress-container { position: fixed; top: 0; width: 100%; height: 4px; z-index: 1000; }
-        .progress-bar { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s ease; }
-
-        /* Setas de Navegação (Apenas PC) */
-        .nav-arrow {
-            position: fixed; top: 50%; transform: translateY(-50%);
-            width: 50px; height: 50px; background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(10px); border-radius: 50%;
-            display: none; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 500; border: 1px solid rgba(0,0,0,0.1);
-            font-weight: bold; font-size: 20px; transition: 0.3s;
+        /* Progress Tracker - Estilo iOS */
+        .header-nav {
+            position: fixed; top: 0; width: 100%; height: 60px;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 100; padding: 0 20px;
         }
-        .nav-arrow:hover { background: #fff; transform: translateY(-50%) scale(1.1); }
-        .arrow-left { left: 20px; }
-        .arrow-right { right: 20px; }
-        @media (min-width: 1024px) { .nav-arrow { display: flex; } }
+        .progress-dots { display: flex; gap: 8px; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: #d2d2d7; transition: 0.3s; }
+        .dot.active { background: var(--accent); width: 20px; border-radius: 10px; }
 
         /* Slider Engine */
-        .slider { 
-            display: flex; 
-            overflow-x: auto; 
-            scroll-snap-type: x mandatory; 
-            width: 100%; height: 100vh; 
-            align-items: center; 
-            padding: 0 25px; 
-            gap: 20px;
+        .main-container {
+            display: flex;
+            overflow-x: auto;
+            overflow-y: hidden;
+            height: 100vh;
+            align-items: center;
+            padding: 0 calc(50vw - (var(--card-w) / 2)); /* Centralização perfeita */
+            scroll-snap-type: x mandatory;
+            gap: 30px;
             scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
         }
-        .slider::-webkit-scrollbar { display: none; }
+        .main-container::-webkit-scrollbar { display: none; }
 
+        /* Card UX */
         .card {
-            flex: 0 0 calc(100vw - 50px); 
-            max-width: 380px; 
-            height: 70vh; max-height: 580px;
-            border-radius: 35px; 
+            flex: 0 0 var(--card-w);
+            height: var(--card-h);
+            background: var(--card-bg);
+            border-radius: 28px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             scroll-snap-align: center;
-            padding: 35px; 
-            display: flex; flex-direction: column; justify-content: space-between;
-            background: #fff; border: 1px solid rgba(0,0,0,0.05); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            user-select: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1), box-shadow 0.3s ease;
+            position: relative;
         }
-
-        @media (min-width: 768px) {
-            .slider { justify-content: center; padding: 0; }
-            .card { flex: 0 0 380px; margin: 0 15px; }
-        }
-
-        .label { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; font-weight: 800; color: rgba(0,0,0,0.4); }
-        h2 { font-size: 24px; font-weight: 800; margin: 12px 0; color: #1d1d1f; line-height: 1.1; }
-        .description { font-size: 14px; color: rgba(0,0,0,0.6); line-height: 1.5; }
-
-        .btn-trigger { 
-            background: #1d1d1f; color: white; padding: 18px; 
-            border-radius: 20px; font-size: 12px; font-weight: 700; 
-            border: none; cursor: pointer; width: 100%;
-        }
-
-        /* Modais */
-        .modal {
-            position: fixed; inset: 0; 
-            background: rgba(255,255,255,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px;
-        }
-        .modal.active { display: flex; }
-        .modal-content { 
-            background: white; width: 100%; max-width: 480px; max-height: 85vh;
-            border-radius: 30px; padding: 35px; overflow-y: auto;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1); position: relative;
-            animation: pop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        @keyframes pop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        .info-card { background: #f9f9fb; padding: 20px; border-radius: 22px; margin-bottom: 15px; border: 1px solid #eee; }
-        .info-card b { display: block; font-size: 14px; color: var(--accent); margin-bottom: 6px; }
-        .info-card p { font-size: 13px; color: #444; line-height: 1.6; }
-
-        .close-btn { 
-            position: absolute; top: 20px; right: 20px; 
-            background: #000; color: #fff; width: 32px; height: 32px; 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; font-size: 14px; z-index: 10;
-        }
-
-        .bg-0 { background-color: var(--c0); } .bg-1 { background-color: var(--c1); }
-        .bg-2 { background-color: var(--c2); } .bg-3 { background-color: var(--c3); }
-        .bg-4 { background-color: var(--c4); } .bg-5 { background-color: var(--c5); }
-        .bg-6 { background-color: var(--c6); }
         
-        .card-6 { background: #1d1d1f !important; color: white; }
-        .card-6 h2, .card-6 .label, .card-6 .description { color: white; }
-        .card-6 .btn-trigger { background: transparent; border: 2px solid white; }
+        .card:hover { transform: scale(1.02); box-shadow: 0 30px 60px rgba(0,0,0,0.08); }
 
-        .footer-tag { position: fixed; bottom: 15px; width: 100%; text-align: center; font-size: 8px; letter-spacing: 3px; color: #888; font-weight: 700; pointer-events: none; }
+        /* Content UI */
+        .tag { font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: block; }
+        h2 { font-size: 32px; font-weight: 800; line-height: 1.1; margin-bottom: 15px; letter-spacing: -0.5px; }
+        p.desc { font-size: 16px; line-height: 1.5; color: var(--text-sub); }
+
+        .btn-action {
+            background: var(--text-main);
+            color: #fff;
+            padding: 20px;
+            border-radius: 16px;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .btn-action:active { transform: scale(0.98); opacity: 0.9; }
+
+        /* Modal UX - High End Glass */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            z-index: 1000; display: none; align-items: flex-end; justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .modal-sheet {
+            background: #fff;
+            width: 100%; max-width: 500px;
+            border-radius: 32px 32px 0 0;
+            padding: 40px 30px;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+        .modal-overlay.active .modal-sheet { transform: translateY(0); }
+
+        .sheet-handle { width: 40px; height: 5px; background: #e2e2e7; border-radius: 10px; margin: -20px auto 30px; }
+
+        .info-row { display: flex; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #f2f2f7; }
+        .icon-box { min-width: 45px; height: 45px; background: #f2f2f7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .info-text h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+        .info-text p { font-size: 14px; color: var(--text-sub); line-height: 1.4; }
+
+        /* Color Variations */
+        body.step-0 { background: #f5f5f7; }
+        body.step-1 { background: #eef4ff; }
+        body.step-2 { background: #fff1f1; }
+        body.step-3 { background: #f0fdf4; }
+        body.step-4 { background: #fdfaf0; }
+        body.step-5 { background: #f8fafc; }
+        body.step-6 { background: #1c1c1e; }
+        
+        .card-dark { background: #2c2c2e; color: #fff; border: none; }
+        .card-dark .tag { color: #0a84ff; }
+        .card-dark p.desc { color: #a1a1a6; }
+        .card-dark .btn-action { background: #fff; color: #000; }
+
+        .close-area { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #86868b; }
+
+        @media (max-width: 768px) {
+            .card { padding: 30px; }
+            h2 { font-size: 28px; }
+        }
     </style>
 </head>
-<body id="body" class="bg-0">
+<body class="step-0">
 
-<div class="progress-container"><div class="progress-bar" id="pBar"></div></div>
-
-<div class="nav-arrow arrow-left" onclick="scrollSlider(-400)">‹</div>
-<div class="nav-arrow arrow-right" onclick="scrollSlider(400)">›</div>
-
-<div class="slider" id="slider">
-    
-    <div class="card">
-        <div><span class="label">WL System</span><h2>Digital Strategy Cavallini</h2><p class="description">Inteligência para o ponto mais estratégico do São Francisco.</p></div>
-        <button class="btn-trigger" onclick="openModal('m0')">Ver Diagnóstico Completo</button>
-    </div>
-
-    <div class="card" style="background: var(--c1)">
-        <div><span class="label">Pilar 1</span><h2>📍 Imã da Rodovia</h2><p class="description">Capture quem chega na cidade com conveniência rápida.</p></div>
-        <button class="btn-trigger" onclick="openModal('m1')">Ver Estratégia</button>
-    </div>
-
-    <div class="card" style="background: var(--c2)">
-        <div><span class="label">Pilar 2</span><h2>🥖 Mercearia & Padaria</h2><p class="description">O essencial que resolve a vida do bairro sem enfrentar filas.</p></div>
-        <button class="btn-trigger" onclick="openModal('m2')">Ver Diferencial</button>
-    </div>
-
-    <div class="card" style="background: var(--c3)">
-        <div><span class="label">Pilar 3</span><h2>📲 CRM & WhatsApp</h2><p class="description">Fidelize a vizinhança direto no celular.</p></div>
-        <button class="btn-trigger" onclick="openModal('m3')">Ver Fluxo Digital</button>
-    </div>
-
-    <div class="card" style="background: var(--c4)">
-        <div><span class="label">Compromisso</span><h2>🤝 Garantia WL</h2><p class="description">Blindagem digital exclusiva para o mercado Cavallini.</p></div>
-        <button class="btn-trigger" onclick="openModal('m4')">Ver Garantias</button>
-    </div>
-
-    <div class="card" style="background: var(--c5)">
-        <div><span class="label">Negócios</span><h2>💰 Planos de Escala</h2><p class="description">Investimento inteligente para o crescimento real.</p></div>
-        <button class="btn-trigger" onclick="openModal('m5')">Ver Valores</button>
-    </div>
-
-    <div class="card card-6">
-        <div><span class="label">Contrato</span><h2>Acordo de Parceria</h2><p class="description">Formalização da exclusividade WL System no São Francisco.</p></div>
-        <button class="btn-trigger" onclick="openModal('m6')">Visualizar Minuta Digital</button>
-    </div>
-
-</div>
-
-<div id="m0" class="modal" onclick="closeOutside(event, 'm0')">
-    <div class="modal-content">
-        <div class="close-btn" onclick="closeModal()">✕</div>
-        <h3>Diagnóstico de Visibilidade</h3>
-        <div class="info-card" style="border-left: 5px solid #ff4d4f;"><b>⚠️ Pontos Críticos Detectados</b>
-            <p>• <b>Escassez de Fotos:</b> Apenas 3 fotos disponíveis, todas da fachada. O cliente não vê a organização interna nem a qualidade dos produtos.<br><br>
-               • <b>Horário Incorreto:</b> Dados no Google desalinhados com a operação real, gerando perda de vendas.<br><br>
-               • <b>Hortifruti Invisível:</b> Setores essenciais não aparecem nas buscas por conveniência.<br><br>
-               • <b>Abandono:</b> Sem atualizações ou respostas a clientes há mais de 5 meses.</p>
+    <div class="header-nav">
+        <div class="progress-dots" id="dots">
+            <div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
         </div>
-        <div class="info-card"><b>Oportunidade</b><p>Sua localização é o portão de entrada da cidade. Vamos converter motoristas em clientes recorrentes.</p></div>
     </div>
-</div>
 
-<div id="m1" class="modal" onclick="closeOutside(event, 'm1')">
-    <div class="modal-content">
-        <div class="close-btn" onclick="closeModal()">✕</div>
-        <h3>📍 O Imã da Rodovia</h3>
-        <div class="info-card"><b>SEO de Conveniência</b><p>Otimização para palavras-chave como "Mercado aberto agora", "Gelo" e "Bebidas" para quem entra em Farroupilha.</p></div>
-        <div class="info-card"><b>Google Maps Pro</b><p>Posicionamento entre os 3 primeiros resultados na região do bairro São Francisco.</p></div>
-    </div>
-</div>
-
-<div id="m2" class="modal" onclick="closeOutside(event, 'm2')">
-    <div class="modal-content">
-        <div class="close-btn" onclick="closeModal()">✕</div>
-        <h3>🥖 Essenciais do Dia</h3>
-        <div class="info-card"><b>Gatilho do Pão Quente</b><p>Criar o hábito digital: o cliente recebe o aviso de quando o pão saiu e passa no mercado na volta do trabalho.</p></div>
-        <div class="info-card"><b>Mercearia Eficiente</b><p>Mostrar que o Cavallini resolve a dispensa sem a burocracia e as filas dos grandes atacados.</p></div>
-    </div>
-</div>
-
-<div id="m3" class="modal" onclick="closeOutside(event, 'm3')">
-    <div class="modal-content">
-        <div class="close-btn" onclick="closeModal()">✕</div>
-        <h3>📲 WhatsApp & CRM</h3>
-        <div class="info-card"><b>Ofertas no Bolso</b><p>Listas de transmissão profissionais com encartes digitais. Mais impacto que o papel, com custo zero de impressão.</p></div>
-        <div class="info-card"><b>Fidelização</b><p>Base de dados dos moradores locais para promoções exclusivas e relâmpago.</p></div>
-    </div>
-</div>
-
-<div id="m4" class="modal" onclick="closeOutside(event, 'm4')">
-    <div class="modal-content">
-        <div class="close-btn" onclick="closeModal()">✕</div>
-        <h3>🤝 Garantia WL System</h3>
-        <div class="info-card"><b>Exclusividade de Bairro</b><p>Blindagem total: Não atendemos nenhum outro mercado no São Francisco enquanto durar nossa parceria.</p></div>
-        <div class="info-card"><b>Propriedade Visual</b><p>Todas as fotos e vídeos profissionais produzidos são de propriedade definitiva do Mercado Cavallini.</p></div>
-    </div>
-</div>
-
-<div id="m5" class="modal" onclick="closeOutside(event, 'm5')">
-    <div class="modal-content">
-        <div class="close-btn" onclick="closeModal()">✕</div>
-        <h3>Planos de Investimento</h3>
-        <div class="info-card"><b>⭐ Plano Básico</b><p>Google Maps + Correção de Dados + Fotos Mensais.<br><b>R$ 650,00/mês</b></p></div>
-        <div class="info-card" style="border: 2px solid var(--accent);"><b>⭐⭐⭐ Plano Elite (Recomendado)</b><p>Básico + CRM WhatsApp + Tráfego Pago + Suporte Noturno 24h para atualizações de feriados/horários.<br><b>R$ 2.400,00/mês</b></p></div>
-    </div>
-</div>
-
-<div id="m6" class="modal" onclick="closeOutside(event, 'm6')">
-    <div class="modal-content">
-        <div class="close-btn" onclick="closeModal()">✕</div>
-        <h3>Minuta de Parceria Profissional</h3>
-        <div class="info-card" style="background: #fffdf5; border: 1px solid #d4c391; font-family: 'Courier New', monospace; font-size: 11px; color: #222;">
-            <p style="text-align: center; font-weight: bold; border-bottom: 1px solid #222; padding-bottom: 5px; margin-bottom: 10px;">INSTRUMENTO DE CONSULTORIA DIGITAL</p>
-            <p><b>CONTRATADA:</b> WL SYSTEM ESTRATÉGIA<br><b>CONTRATANTE:</b> MERCADO CAVALLINI</p><br>
-            <p>1. <b>OBJETO:</b> Gestão de presença online e automação de vendas.<br>
-            2. <b>EXCLUSIVIDADE:</b> Raio de 2km no bairro São Francisco.<br>
-            3. <b>RESCISÃO:</b> Liberdade de cancelamento após o 3º mês.<br>
-            4. <b>SUPORTE:</b> Atendimento prioritário WL via WhatsApp.</p>
+    <div class="main-container" id="slider">
+        <div class="card">
+            <div>
+                <span class="tag">Análise WL System</span>
+                <h2>Estratégia Digital Cavallini</h2>
+                <p class="desc">Diagnóstico de visibilidade e proposta de expansão para a unidade São Francisco.</p>
+            </div>
+            <button class="btn-action" onclick="openModal('m0')">Ver Problemas Atuais</button>
         </div>
-        <button class="btn-trigger" style="background: #25d366; margin-top: 15px;">✅ ACEITAR E INICIAR</button>
+
+        <div class="card">
+            <div>
+                <span class="tag">Pilar Local</span>
+                <h2>📍 O Imã da Rodovia</h2>
+                <p class="desc">Sua localização na entrada da cidade é um ativo de ouro. Vamos fazer todos pararem aqui.</p>
+            </div>
+            <button class="btn-action" onclick="openModal('m1')">Estratégia SEO</button>
+        </div>
+
+        <div class="card">
+            <div>
+                <span class="tag">Pilar Venda</span>
+                <h2>🥖 Padaria e Mercearia</h2>
+                <p class="desc">A conveniência que o bairro precisa. O pão quente como gatilho de tráfego diário.</p>
+            </div>
+            <button class="btn-action" onclick="openModal('m2')">Ver Diferencial</button>
+        </div>
+
+        <div class="card">
+            <div>
+                <span class="tag">Pilar Digital</span>
+                <h2>📲 CRM WhatsApp</h2>
+                <p class="desc">Venda direta. Ofertas semanais sem custo de impressão, direto no bolso do cliente.</p>
+            </div>
+            <button class="btn-action" onclick="openModal('m3')">Ver Fluxo</button>
+        </div>
+
+        <div class="card">
+            <div>
+                <span class="tag">Segurança</span>
+                <h2>🤝 Exclusividade WL</h2>
+                <p class="desc">Não atendemos concorrentes. Nossa energia é 100% no seu crescimento regional.</p>
+            </div>
+            <button class="btn-action" onclick="openModal('m4')">Ver Termos</button>
+        </div>
+
+        <div class="card">
+            <div>
+                <span class="tag">Negócio</span>
+                <h2>💰 Plano de Escala</h2>
+                <p class="desc">Estrutura de investimento focada em ROI (Retorno sobre Investimento).</p>
+            </div>
+            <button class="btn-action" onclick="openModal('m5')">Ver Pacotes</button>
+        </div>
+
+        <div class="card card-dark">
+            <div>
+                <span class="tag">Fechamento</span>
+                <h2>Acordo de Parceria</h2>
+                <p class="desc">Acesso total às ferramentas WL System e início imediato das otimizações.</p>
+            </div>
+            <button class="btn-action" onclick="openModal('m6')">Assinar Digitalmente</button>
+        </div>
     </div>
-</div>
 
-<div class="footer-tag">WL SYSTEM | FARROUPILHA - RS</div>
+    <div class="modal-overlay" id="overlay" onclick="closeModal(event)">
+        <div class="modal-sheet" id="sheet">
+            <div class="sheet-handle"></div>
+            <div id="modal-body">
+                </div>
+        </div>
+    </div>
 
-<script>
-    const slider = document.getElementById('slider');
-    const body = document.getElementById('body');
-    const pBar = document.getElementById('pBar');
+    <script>
+        const slider = document.getElementById('slider');
+        const dots = document.querySelectorAll('.dot');
+        const body = document.body;
 
-    slider.addEventListener('scroll', () => {
-        const scrollPercent = (slider.scrollLeft / (slider.scrollWidth - window.innerWidth)) * 100;
-        pBar.style.width = scrollPercent + '%';
-        const cardWidth = window.innerWidth < 768 ? (window.innerWidth - 30) : 400;
-        const index = Math.round(slider.scrollLeft / cardWidth);
-        if(index >= 0 && index <= 6) body.className = `bg-${index}`;
-    });
+        const content = {
+            m0: `<h3>Diagnóstico Crítico</h3>
+                <div class="info-row"><div class="icon-box">📸</div><div class="info-text"><h4>Visibilidade Pobre</h4><p>Apenas 3 fotos de fachada. O cliente não conhece o potencial interno.</p></div></div>
+                <div class="info-row"><div class="icon-box">⏰</div><div class="info-text"><h4>Dados Incorretos</h4><p>Horários no Google divergem da realidade, perdendo fluxo de motoristas.</p></div></div>`,
+            m1: `<h3>📍 Imã da Rodovia</h3>
+                <div class="info-row"><div class="icon-box">🔍</div><div class="info-text"><h4>Busca Local</h4><p>Aparecer em 1º para "Mercado agora" ou "Padaria próxima" na entrada da cidade.</p></div></div>`,
+            m2: `<h3>🥖 Mercearia & Padaria</h3>
+                <div class="info-row"><div class="icon-box">🔥</div><div class="info-text"><h4>Gatilho de Fluxo</h4><p>Divulgação estratégica dos horários de pão quente para criar hábito de compra.</p></div></div>`,
+            m3: `<h3>📲 CRM WhatsApp</h3>
+                <div class="info-row"><div class="icon-box">💬</div><div class="info-text"><h4>Lista de Elite</h4><p>Criar base de moradores do São Francisco para ofertas relâmpago via WhatsApp.</p></div></div>`,
+            m4: `<h3>🤝 Garantia WL</h3>
+                <div class="info-row"><div class="icon-box">🛡️</div><div class="info-text"><h4>Raio de Exclusividade</h4><p>Blindagem de 2km. Zero concorrência atendida pela WL System.</p></div></div>`,
+            m5: `<h3>💰 Planos</h3>
+                <div class="info-row" style="background:#f2f2f7; border-radius:15px; padding:15px;"><div class="info-text"><h4>Plano Elite</h4><p>Gestão Total + Tráfego + CRM.<br><b>R$ 2.400,00/mês</b></p></div></div>`,
+            m6: `<h3>Contrato Digital</h3>
+                <div class="info-row"><div class="info-text"><h4>WL System & Cavallini</h4><p>Exclusividade, suporte 24h e cancelamento livre após 90 dias.</p></div></div>
+                <button class="btn-action" style="background:#25d366">✅ Confirmar Início</button>`
+        };
 
-    function scrollSlider(amount) { slider.scrollBy({ left: amount, behavior: 'smooth' }); }
-    function openModal(id) { document.getElementById(id).classList.add('active'); }
-    function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); }
-    function closeOutside(e, id) { if(e.target.id === id) closeModal(); }
-</script>
+        slider.addEventListener('scroll', () => {
+            const index = Math.round(slider.scrollLeft / (window.innerWidth * 0.85));
+            dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+            body.className = `step-${index}`;
+        });
 
+        function openModal(id) {
+            document.getElementById('modal-body').innerHTML = content[id];
+            document.getElementById('overlay').classList.add('active');
+        }
+
+        function closeModal(e) {
+            if(e.target.id === 'overlay') document.getElementById('overlay').classList.remove('active');
+        }
+    </script>
 </body>
 </html>
