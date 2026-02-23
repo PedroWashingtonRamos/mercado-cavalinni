@@ -12,6 +12,7 @@
         }
 
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
         body { 
             margin: 0; padding: 0; height: 100vh; 
             font-family: 'Inter', sans-serif; 
@@ -20,11 +21,11 @@
             overflow: hidden; 
         }
 
-        /* Progress Bar */
+        /* Barra de Progresso Superior */
         .progress-container { position: fixed; top: 0; width: 100%; height: 4px; z-index: 1000; }
         .progress-bar { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s ease; }
 
-        /* Slider Engine */
+        /* Container do Slider */
         .slider { 
             display: flex; 
             overflow-x: auto; 
@@ -37,13 +38,14 @@
             -webkit-overflow-scrolling: touch;
         }
         
-        /* Melhoria para Navegador PC */
+        /* Scrollbar Invisível mas funcional no PC */
         .slider::-webkit-scrollbar { height: 6px; }
         .slider::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
 
+        /* Estilo dos Cards */
         .card {
             min-width: calc(100vw - 50px); 
-            max-width: 400px; /* Limite para não quebrar no PC */
+            max-width: 400px; 
             height: 75vh; 
             border-radius: 35px; 
             scroll-snap-align: center;
@@ -56,12 +58,12 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.05);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
             cursor: pointer;
-            position: relative;
         }
 
+        /* Responsividade para Tablet e PC */
         @media (min-width: 768px) {
             .card { min-width: 380px; height: 65vh; }
-            .slider { justify-content: flex-start; padding: 0 10%; }
+            .slider { justify-content: center; padding: 0 10%; }
         }
 
         .card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(0,0,0,0.1); }
@@ -70,16 +72,19 @@
         h2 { font-size: 26px; font-weight: 800; margin: 15px 0; color: #1d1d1f; line-height: 1.1; }
         .description { font-size: 14px; color: rgba(0,0,0,0.6); line-height: 1.5; }
 
-        .btn-open { background: #1d1d1f; color: white; padding: 14px 20px; border-radius: 20px; font-size: 12px; font-weight: 700; text-align: center; border: none; }
-        .btn-outline { background: transparent; color: #fff; border: 2px solid #fff; padding: 12px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-align: center; width: 100%; display: block; }
+        .btn-open { background: #1d1d1f; color: white; padding: 14px 20px; border-radius: 20px; font-size: 12px; font-weight: 700; text-align: center; border: none; transition: 0.3s; }
+        .btn-open:hover { background: var(--accent); }
+        
+        .btn-outline { background: transparent; color: #fff; border: 2px solid #fff; padding: 12px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-align: center; width: 100%; display: block; margin-top: 10px; }
 
-        /* Modal System */
+        /* Sistema de Modais */
         .modal {
-            position: fixed; inset: 0; background: rgba(255,255,255,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            position: fixed; inset: 0; background: rgba(255,255,255,0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             z-index: 2000; display: none; padding: 60px 25px 40px; overflow-y: auto;
         }
-        .modal.active { display: flex; flex-direction: column; align-items: center; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .modal.active { display: flex; flex-direction: column; align-items: center; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
 
         .modal-content { max-width: 500px; width: 100%; }
 
@@ -89,11 +94,12 @@
 
         .close-btn { position: fixed; top: 20px; right: 20px; font-weight: 800; background: #000; color: #fff; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2001; cursor: pointer; }
 
-        /* Dynamic Backgrounds */
+        /* Cores de Fundo Dinâmicas */
         .bg-0 { background-color: var(--c0); } .bg-1 { background-color: var(--c1); }
         .bg-2 { background-color: var(--c2); } .bg-3 { background-color: var(--c3); }
         .bg-4 { background-color: var(--c4); } .bg-5 { background-color: var(--c5); }
         .bg-6 { background-color: var(--c6); }
+        
         .card-6 { background: #1d1d1f !important; color: white; }
         .card-6 h2, .card-6 .label, .card-6 .description { color: white; }
 
@@ -117,12 +123,12 @@
     </div>
 
     <div class="card" style="background: var(--c2)" onclick="openModal('m2')">
-        <div><span class="label">Pilar 2</span><h2>🥖 Mercearia & Padaria</h2><p class="description">Onde o essencial encontra a agilidade que o cliente do bairro precisa.</p></div>
+        <div><span class="label">Pilar 2</span><h2>🥖 Mercearia & Padaria</h2><p class="description">Foco no essencial que resolve a vida do cliente sem filas.</p></div>
         <div class="btn-open">Ver Estilo</div>
     </div>
 
     <div class="card" style="background: var(--c3)" onclick="openModal('m3')">
-        <div><span class="label">Pilar 3</span><h2>📲 CRM & WhatsApp</h2><p class="description">Ofertas diretas no celular para fidelizar quem mora na vizinhança.</p></div>
+        <div><span class="label">Pilar 3</span><h2>📲 CRM & WhatsApp</h2><p class="description">Ofertas diretas no celular para fidelizar a vizinhança.</p></div>
         <div class="btn-open">Ver Fluxo</div>
     </div>
 
@@ -136,9 +142,9 @@
         <div class="btn-open">Ver Pacotes</div>
     </div>
 
-    <div class="card card-6">
+    <div class="card card-6" onclick="openModal('m6')">
         <div><span class="label">Formalização</span><h2>Acordo de Parceria</h2><p class="description">Termos de exclusividade e diretrizes da WL System para o Cavallini.</p></div>
-        <div class="btn-outline" onclick="openModal('m6')">Visualizar Contrato Digital</div>
+        <div class="btn-outline">Visualizar Contrato Digital</div>
     </div>
 
 </div>
@@ -148,26 +154,31 @@
     <div class="modal-content">
         <h3>Diagnóstico de Visibilidade</h3>
         <div class="info-card" style="border-left: 5px solid #ff4d4f;"><b>⚠️ Pontos Críticos</b>
-            <p>• Horários incorretos no Google.<br>• Apenas 3 fotos (todas da rua).<br>• Zero interação com clientes nos últimos 5 meses.</p>
+            <p style="font-size: 12px;">
+                • <b>Horário Incorreto:</b> O Google mostra dados desalinhados com a abertura real.<br><br>
+                • <b>Apenas 3 Fotos:</b> Todas visando apenas a fachada/rua. O cliente não conhece o interior.<br><br>
+                • <b>Hortifruti Invisível:</b> Por ser enxuto, o setor não é valorizado nas buscas locais.<br><br>
+                • <b>Abandono Digital:</b> Zero respostas a avaliações e nenhuma atualização há meses.
+            </p>
         </div>
-        <div class="info-card"><b>Oportunidade</b><p>Sua localização é o portão de entrada da cidade. Vamos converter motoristas em clientes fiéis.</p></div>
+        <div class="info-card"><b>Oportunidade</b><p>Sua posição na R. Hilário Hilgert é o portão de entrada de Farroupilha. Vamos converter esse tráfego em vendas.</p></div>
     </div>
 </div>
 
-<div id="m1" class="modal"><div class="close-btn" onclick="closeModal()">✕</div><div class="modal-content"><h3>📍 O Imã da Rodovia</h3><div class="info-card"><b>SEO Local</b><p>Aparecer para quem busca "mercado aberto agora" ou "conveniência" ao entrar em Farroupilha.</p></div></div></div>
+<div id="m1" class="modal"><div class="close-btn" onclick="closeModal()">✕</div><div class="modal-content"><h3>📍 O Imã da Rodovia</h3><div class="info-card"><b>Conveniência Total</b><p>Otimizaremos o Google para palavras como 'Mercado próximo', 'Gelo' e 'Bebidas'. O motorista precisa parar no Cavallini antes de entrar na cidade.</p></div></div></div>
 
-<div id="m2" class="modal"><div class="close-btn" onclick="closeModal()">✕</div><div class="modal-content"><h3>🥖 Essenciais</h3><div class="info-card"><b>Padaria</b><p>Foco no pão quentinho como chamariz diário.</p></div><div class="info-card"><b>Mercearia</b><p>Velocidade e organização para compras de dispensa.</p></div></div></div>
+<div id="m2" class="modal"><div class="close-btn" onclick="closeModal()">✕</div><div class="modal-content"><h3>🥖 Mercearia & Padaria</h3><div class="info-card"><b>O Pão do Dia</b><p>Foco total no pão francês sempre quentinho como motivo de visita diária.</p></div><div class="info-card"><b>Mix Essencial</b><p>Destaque para a mercearia organizada que resolve a falta de itens em casa sem a demora do centro.</p></div></div></div>
 
-<div id="m3" class="modal"><div class="close-btn" onclick="closeModal()">✕</div><div class="modal-content"><h3>📲 CRM & WhatsApp</h3><div class="info-card"><b>Venda Direta</b><p>Encartes digitais sem custo de impressão e com maior alcance.</p></div></div></div>
+<div id="m3" class="modal"><div class="close-btn" onclick="closeModal()">✕</div><div class="modal-content"><h3>📲 WhatsApp CRM</h3><div class="info-card"><b>Lista de Transmissão</b><p>Promoções direto no celular do morador do São Francisco. Mais impacto, zero custo de papel.</p></div></div></div>
 
-<div id="m4" class="modal"><div class="close-btn" onclick="closeModal()">✕</div><div class="modal-content"><h3>🤝 Garantia WL</h3><div class="info-card"><b>Exclusividade</b><p>Não atendemos nenhum outro mercado no bairro São Francisco.</p></div><div class="info-card"><b>Propriedade</b><p>Fotos e vídeos profissionais são seus para sempre.</p></div></div></div>
+<div id="m4" class="modal"><div class="close-btn" onclick="closeModal()">✕</div><div class="modal-content"><h3>🤝 Garantia WL System</h3><div class="info-card"><b>Exclusividade de Bairro</b><p>Não atendemos nenhum outro mercado no São Francisco. Somos parceiros únicos do Cavallini.</p></div><div class="info-card"><b>Propriedade Visual</b><p>Todas as fotos internas profissionais tiradas por nós pertencerão 100% ao mercado.</p></div></div></div>
 
 <div id="m5" class="modal">
     <div class="close-btn" onclick="closeModal()">✕</div>
     <div class="modal-content">
-        <h3>Planos de Escala</h3>
-        <div class="info-card"><b>⭐ Plano Básico</b><p>Google Maps + Fotos Mensais.<br><b>R$ 650,00/mês</b></p></div>
-        <div class="info-card" style="border: 2px solid var(--accent);"><b>⭐⭐⭐ Plano Elite</b><p>Gestão Completa + Tráfego + Suporte 24h.<br><b>R$ 2.400,00/mês</b></p></div>
+        <h3>Planos de Investimento</h3>
+        <div class="info-card"><b>⭐ Plano Básico</b><p>Google Maps + Correção de Dados + Fotos Mensais.<br><b>R$ 650,00/mês</b></p></div>
+        <div class="info-card" style="border: 2px solid var(--accent);"><b>⭐⭐⭐ Plano Elite</b><p>Gestão Completa + WhatsApp + Tráfego Pago + Suporte 24h.<br><b>R$ 2.400,00/mês</b></p></div>
     </div>
 </div>
 
@@ -175,13 +186,14 @@
     <div class="close-btn" onclick="closeModal()">✕</div>
     <div class="modal-content">
         <h3>Minuta de Parceria</h3>
-        <div class="info-card" style="background: #fffdf5; border: 1px solid #d4c391; font-family: monospace; font-size: 11px;">
-            <p style="text-align: center; font-weight: bold;">CONTRATO DE CONSULTORIA DIGITAL</p>
-            <p><b>EXCLUSIVIDADE:</b> Raio de 2km no São Francisco.</p>
-            <p><b>CANCELAMENTO:</b> Livre após 90 dias.</p>
-            <p><b>SUPORTE:</b> Atendimento prioritário para o Cavallini.</p>
+        <div class="info-card" style="background: #fffdf5; border: 1px solid #d4c391; font-family: 'Courier New', monospace; font-size: 11px; color: #333;">
+            <p style="text-align: center; font-weight: bold; border-bottom: 2px solid #333; padding-bottom: 5px;">CONTRATO DE CONSULTORIA DIGITAL</p>
+            <p><b>EXCLUSIVIDADE:</b> Soberania digital num raio de 2km.</p>
+            <p><b>PROPRIEDADE:</b> Ativos digitais pertencem ao CONTRATANTE.</p>
+            <p><b>RESCISÃO:</b> Livre após 90 dias de implementação.</p>
+            <p style="text-align: center; margin-top: 20px;">___________________________<br>WL SYSTEM STRATEGY</p>
         </div>
-        <div style="background: #25d366; color: white; padding: 18px; border-radius: 20px; text-align: center; font-weight: 800; cursor: pointer;">✅ INICIAR PARCERIA</div>
+        <div style="background: #25d366; color: white; padding: 18px; border-radius: 20px; text-align: center; font-weight: 800; margin-top: 15px;">✅ ACEITAR E INICIAR AGORA</div>
     </div>
 </div>
 
@@ -196,8 +208,8 @@
         const scrollPercent = (slider.scrollLeft / (slider.scrollWidth - window.innerWidth)) * 100;
         pBar.style.width = scrollPercent + '%';
         
-        // Troca de fundo baseada na posição
-        const index = Math.round(slider.scrollLeft / 400); 
+        // Ajuste fino da troca de cor de fundo
+        const index = Math.round(slider.scrollLeft / (window.innerWidth < 768 ? (window.innerWidth - 30) : 400));
         if(index >= 0 && index <= 6) body.className = `bg-${index}`;
     });
 
