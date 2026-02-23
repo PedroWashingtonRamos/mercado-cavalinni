@@ -12,41 +12,84 @@
         }
 
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-        body { margin: 0; padding: 0; height: 100vh; font-family: 'Inter', sans-serif; background-color: var(--c0); transition: background-color 0.8s ease; overflow: hidden; }
+        body { 
+            margin: 0; padding: 0; height: 100vh; 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--c0); 
+            transition: background-color 0.8s ease; 
+            overflow: hidden; 
+        }
 
+        /* Progress Bar */
         .progress-container { position: fixed; top: 0; width: 100%; height: 4px; z-index: 1000; }
         .progress-bar { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s ease; }
 
-        .slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; height: 100vh; align-items: center; padding: 0 25px; gap: 20px; }
-        .slider::-webkit-scrollbar { display: none; }
+        /* Slider Engine */
+        .slider { 
+            display: flex; 
+            overflow-x: auto; 
+            scroll-snap-type: x mandatory; 
+            height: 100vh; 
+            align-items: center; 
+            padding: 0 25px; 
+            gap: 20px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Melhoria para Navegador PC */
+        .slider::-webkit-scrollbar { height: 6px; }
+        .slider::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
 
         .card {
-            min-width: calc(100vw - 50px); height: 80vh; border-radius: 35px; scroll-snap-align: center;
-            padding: 45px 35px; display: flex; flex-direction: column; justify-content: space-between;
-            background: #fff; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            transition: all 0.4s ease; cursor: pointer;
+            min-width: calc(100vw - 50px); 
+            max-width: 400px; /* Limite para não quebrar no PC */
+            height: 75vh; 
+            border-radius: 35px; 
+            scroll-snap-align: center;
+            padding: 40px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+            background: #fff; 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+            cursor: pointer;
+            position: relative;
         }
 
+        @media (min-width: 768px) {
+            .card { min-width: 380px; height: 65vh; }
+            .slider { justify-content: flex-start; padding: 0 10%; }
+        }
+
+        .card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(0,0,0,0.1); }
+
         .label { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; font-weight: 800; color: rgba(0,0,0,0.4); }
-        h2 { font-size: 28px; font-weight: 800; margin: 15px 0; color: #1d1d1f; line-height: 1.1; }
-        .description { font-size: 15px; color: rgba(0,0,0,0.6); line-height: 1.5; }
+        h2 { font-size: 26px; font-weight: 800; margin: 15px 0; color: #1d1d1f; line-height: 1.1; }
+        .description { font-size: 14px; color: rgba(0,0,0,0.6); line-height: 1.5; }
 
         .btn-open { background: #1d1d1f; color: white; padding: 14px 20px; border-radius: 20px; font-size: 12px; font-weight: 700; text-align: center; border: none; }
         .btn-outline { background: transparent; color: #fff; border: 2px solid #fff; padding: 12px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-align: center; width: 100%; display: block; }
 
+        /* Modal System */
         .modal {
-            position: fixed; inset: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            position: fixed; inset: 0; background: rgba(255,255,255,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             z-index: 2000; display: none; padding: 60px 25px 40px; overflow-y: auto;
         }
-        .modal.active { display: block; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .modal.active { display: flex; flex-direction: column; align-items: center; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        .modal-content { max-width: 500px; width: 100%; }
 
         .info-card { background: white; padding: 20px; border-radius: 20px; border: 1px solid #eee; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-        .info-card b { display: block; font-size: 15px; margin-bottom: 5px; color: var(--accent); }
+        .info-card b { display: block; font-size: 14px; margin-bottom: 5px; color: var(--accent); }
         .info-card p { margin: 0; font-size: 13px; color: #444; line-height: 1.6; }
 
         .close-btn { position: fixed; top: 20px; right: 20px; font-weight: 800; background: #000; color: #fff; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2001; cursor: pointer; }
 
+        /* Dynamic Backgrounds */
         .bg-0 { background-color: var(--c0); } .bg-1 { background-color: var(--c1); }
         .bg-2 { background-color: var(--c2); } .bg-3 { background-color: var(--c3); }
         .bg-4 { background-color: var(--c4); } .bg-5 { background-color: var(--c5); }
@@ -102,78 +145,43 @@
 
 <div id="m0" class="modal">
     <div class="close-btn" onclick="closeModal()">✕</div>
-    <h3>Diagnóstico de Visibilidade</h3>
-    <div class="info-card" style="border-left: 5px solid #ff4d4f;"><b>⚠️ Pontos Críticos Identificados</b>
-        <p style="font-size: 12px; margin-top: 5px;">
-            • <b>Horário Incorreto:</b> O Google mostra informações que não batem com a realidade, confundindo o cliente.<br><br>
-            • <b>Escassez de Fotos:</b> Apenas 3 fotos disponíveis, todas da fachada/rua. O cliente não vê o interior nem os produtos.<br><br>
-            • <b>Abandono Digital:</b> Zero avaliações respondidas e nenhuma atualização há 5 meses (parece que o mercado fechou).<br><br>
-            • <b>Setores Invisíveis:</b> Quem olha de fora não sabe da qualidade do pão e da mercearia.
-        </p>
+    <div class="modal-content">
+        <h3>Diagnóstico de Visibilidade</h3>
+        <div class="info-card" style="border-left: 5px solid #ff4d4f;"><b>⚠️ Pontos Críticos</b>
+            <p>• Horários incorretos no Google.<br>• Apenas 3 fotos (todas da rua).<br>• Zero interação com clientes nos últimos 5 meses.</p>
+        </div>
+        <div class="info-card"><b>Oportunidade</b><p>Sua localização é o portão de entrada da cidade. Vamos converter motoristas em clientes fiéis.</p></div>
     </div>
-    <div class="info-card"><b>Oportunidade Geográfica</b><p>Sua posição na R. Hilário Hilgert é o 'portão de entrada' de quem vem da rodovia. Vamos usar isso para parar o carro do cliente aqui.</p></div>
 </div>
 
-<div id="m1" class="modal">
-    <div class="close-btn" onclick="closeModal()">✕</div>
-    <h3>📍 O Imã da Rodovia</h3>
-    <div class="info-card"><b>SEO de Conveniência</b><p>Otimizaremos o Google para palavras como 'Mercado rápido', 'Gelo' e 'Bebidas', captando quem vem da rodovia antes de chegar ao centro.</p></div>
-    <div class="info-card"><b>Dados em Tempo Real</b><p>Ajuste rigoroso de horários para que nenhum cliente perca a viagem e fique frustrado na frente da loja.</p></div>
-</div>
+<div id="m1" class="modal"><div class="close-btn" onclick="closeModal()">✕</div><div class="modal-content"><h3>📍 O Imã da Rodovia</h3><div class="info-card"><b>SEO Local</b><p>Aparecer para quem busca "mercado aberto agora" ou "conveniência" ao entrar em Farroupilha.</p></div></div></div>
 
-<div id="m2" class="modal">
-    <div class="close-btn" onclick="closeModal()">✕</div>
-    <h3>🥖 Essenciais do Dia</h3>
-    <div class="info-card"><b>Gatilho do Pão</b><p>Foco no pão francês sempre quentinho. Vamos criar o hábito digital no cliente de saber exatamente quando o pão saiu.</p></div>
-    <div class="info-card"><b>Mercearia Eficiente</b><p>Mostraremos que o Cavallini resolve a dispensa do cliente com rapidez, sem as filas e a burocracia dos grandes atacados.</p></div>
-</div>
+<div id="m2" class="modal"><div class="close-btn" onclick="closeModal()">✕</div><div class="modal-content"><h3>🥖 Essenciais</h3><div class="info-card"><b>Padaria</b><p>Foco no pão quentinho como chamariz diário.</p></div><div class="info-card"><b>Mercearia</b><p>Velocidade e organização para compras de dispensa.</p></div></div></div>
 
-<div id="m3" class="modal">
-    <div class="close-btn" onclick="closeModal()">✕</div>
-    <h3>📲 WhatsApp de Vendas</h3>
-    <div class="info-card"><b>Ofertas no Bolso</b><p>Listas de transmissão com as promoções de mercearia e utilidades, chegando direto aos moradores do São Francisco.</p></div>
-    <div class="info-card"><b>Vitrine Digital</b><p>Substituímos o encarte de papel por algo moderno, prático e que o cliente sempre tem à mão.</p></div>
-</div>
+<div id="m3" class="modal"><div class="close-btn" onclick="closeModal()">✕</div><div class="modal-content"><h3>📲 CRM & WhatsApp</h3><div class="info-card"><b>Venda Direta</b><p>Encartes digitais sem custo de impressão e com maior alcance.</p></div></div></div>
 
-<div id="m4" class="modal">
-    <div class="close-btn" onclick="closeModal()">✕</div>
-    <h3>🤝 Garantia WL System</h3>
-    <div class="info-card"><b>Blindagem Regional</b><p>Exclusividade total: não atendemos outros mercados no São Francisco enquanto o contrato estiver vigente.</p></div>
-    <div class="info-card"><b>Correção Instantânea</b><p>Mudou o horário no feriado? Nós atualizamos tudo no Google e WhatsApp para você em minutos.</p></div>
-    <div class="info-card"><b>Propriedade dos Ativos</b><p>Todas as fotos e vídeos produzidos são de propriedade do mercado para uso em qualquer plataforma.</p></div>
-</div>
+<div id="m4" class="modal"><div class="close-btn" onclick="closeModal()">✕</div><div class="modal-content"><h3>🤝 Garantia WL</h3><div class="info-card"><b>Exclusividade</b><p>Não atendemos nenhum outro mercado no bairro São Francisco.</p></div><div class="info-card"><b>Propriedade</b><p>Fotos e vídeos profissionais são seus para sempre.</p></div></div></div>
 
 <div id="m5" class="modal">
     <div class="close-btn" onclick="closeModal()">✕</div>
-    <h3>Planos de Investimento</h3>
-    <div class="info-card"><b>⭐ Plano Básico</b><p>Google Maps + Correção de Dados + Fotos Mensais.<br><b>R$ 650,00/mês</b></p></div>
-    <div class="info-card"><b>⭐⭐ Plano Intermediário</b><p>Básico + WhatsApp CRM + Ofertas Digitais + 4 Reels Estratégicos.<br><b>R$ 1.250,00/mês</b></p></div>
-    <div class="info-card" style="border: 2px solid var(--accent);"><b>⭐⭐⭐ Plano Avançado (Elite)</b><p>Intermediário + Tráfego Pago + <b>Suporte Noturno 24h</b> (Gestão ativa de dados).<br><b>R$ 2.400,00/mês</b></p></div>
+    <div class="modal-content">
+        <h3>Planos de Escala</h3>
+        <div class="info-card"><b>⭐ Plano Básico</b><p>Google Maps + Fotos Mensais.<br><b>R$ 650,00/mês</b></p></div>
+        <div class="info-card" style="border: 2px solid var(--accent);"><b>⭐⭐⭐ Plano Elite</b><p>Gestão Completa + Tráfego + Suporte 24h.<br><b>R$ 2.400,00/mês</b></p></div>
+    </div>
 </div>
 
 <div id="m6" class="modal">
     <div class="close-btn" onclick="closeModal()">✕</div>
-    <h3>Minuta de Parceria Profissional</h3>
-    <div class="info-card" style="background: #fffdf5; border: 1px solid #d4c391; font-family: 'Courier New', Courier, monospace; color: #222;">
-        <p style="text-align: center; font-weight: bold; border-bottom: 2px solid #222; padding-bottom: 10px;">INSTRUMENTO DE CONSULTORIA DIGITAL</p>
-        <p style="font-size: 11px;"><b>CONTRATADA:</b> WL SYSTEM ESTRATÉGIA DIGITAL<br><b>CONTRATANTE:</b> MERCADO CAVALLINI</p>
-        <p style="font-size: 11px; line-height: 1.4;">
-            <b>1. OBJETO:</b> Gestão de presença online, Google Business e automação de WhatsApp.<br><br>
-            <b>2. EXCLUSIVIDADE:</b> A CONTRATADA garante soberania digital ao CONTRATANTE, não atendendo concorrentes num raio de 2km.<br><br>
-            <b>3. PROPRIEDADE:</b> Todo material produzido pertence integralmente ao CONTRATANTE.<br><br>
-            <b>4. RESCISÃO:</b> Vigência mensal com liberdade de cancelamento após o 3º mês de implementação.
-        </p>
-        <div style="margin-top: 20px; text-align: center; font-size: 10px;">
-            <p>Farroupilha, RS - 2026</p>
-            <p>__________________________________________</p>
-            <p>WL SYSTEM DIGITAL STRATEGY</p>
+    <div class="modal-content">
+        <h3>Minuta de Parceria</h3>
+        <div class="info-card" style="background: #fffdf5; border: 1px solid #d4c391; font-family: monospace; font-size: 11px;">
+            <p style="text-align: center; font-weight: bold;">CONTRATO DE CONSULTORIA DIGITAL</p>
+            <p><b>EXCLUSIVIDADE:</b> Raio de 2km no São Francisco.</p>
+            <p><b>CANCELAMENTO:</b> Livre após 90 dias.</p>
+            <p><b>SUPORTE:</b> Atendimento prioritário para o Cavallini.</p>
         </div>
-    </div>
-    <div style="margin-top: 20px;">
-        <div style="background: #25d366; color: white; padding: 18px; border-radius: 20px; text-align: center; font-weight: 800; font-size: 14px;">
-            ✅ ACEITAR E INICIAR AGORA
-        </div>
-        <p style="text-align: center; font-size: 11px; color: #888; margin-top: 10px;">Formalize o início da parceria diretamente com seu consultor.</p>
+        <div style="background: #25d366; color: white; padding: 18px; border-radius: 20px; text-align: center; font-weight: 800; cursor: pointer;">✅ INICIAR PARCERIA</div>
     </div>
 </div>
 
@@ -187,7 +195,9 @@
     slider.addEventListener('scroll', () => {
         const scrollPercent = (slider.scrollLeft / (slider.scrollWidth - window.innerWidth)) * 100;
         pBar.style.width = scrollPercent + '%';
-        const index = Math.round(slider.scrollLeft / (window.innerWidth - 30));
+        
+        // Troca de fundo baseada na posição
+        const index = Math.round(slider.scrollLeft / 400); 
         if(index >= 0 && index <= 6) body.className = `bg-${index}`;
     });
 
