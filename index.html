@@ -3,232 +3,420 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WL System | Estratégia Cavallini</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>WL System Pro | Consultoria Cavallini</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        /* ========================================
+        SISTEMA DE DESIGN WL SYSTEM 
+        ========================================
+        */
         :root {
-            --bg: #f5f5f7;
+            --bg-default: #f5f5f7;
             --accent: #0071e3;
-            --card-w: clamp(320px, 88vw, 420px);
-            --card-h: clamp(550px, 80vh, 700px);
+            --accent-soft: rgba(0, 113, 227, 0.1);
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --white: #ffffff;
+            --card-width: clamp(320px, 90vw, 440px);
+            --card-height: clamp(580px, 82vh, 750px);
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.1);
         }
 
+        /* Reset & Base */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
         
         body { 
             font-family: 'Inter', sans-serif;
-            background: var(--bg);
+            background-color: var(--bg-default);
             height: 100vh;
+            width: 100vw;
             overflow: hidden;
-            transition: background 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-primary);
+            transition: background-color 0.8s ease;
         }
 
-        /* Navegação Superior */
-        .header-nav {
-            position: fixed; top: 0; width: 100%; height: 70px;
-            display: flex; align-items: center; justify-content: center;
-            z-index: 100;
+        /* ========================================
+        NAVEGAÇÃO E PROGRESSO
+        ========================================
+        */
+        .top-interface {
+            position: fixed; top: 0; left: 0; width: 100%; height: 80px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 1000;
         }
-        .dots { display: flex; gap: 8px; }
-        .dot { width: 6px; height: 6px; border-radius: 50%; background: #d2d2d7; transition: 0.3s; }
-        .dot.active { background: var(--accent); width: 22px; border-radius: 10px; }
 
-        /* Setas para PC */
-        .nav-arrow {
+        .brand-logo { font-weight: 900; font-size: 14px; letter-spacing: 2px; color: var(--text-primary); text-transform: uppercase; }
+
+        .progress-dots { display: flex; gap: 10px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: #d2d2d7; transition: var(--transition-smooth); cursor: pointer; }
+        .dot.active { background: var(--accent); width: 28px; border-radius: 10px; }
+
+        /* ========================================
+        CONTROLES LATERAIS (PC)
+        ========================================
+        */
+        .nav-control {
             position: fixed; top: 50%; transform: translateY(-50%);
-            width: 50px; height: 50px; background: #fff;
+            width: 60px; height: 60px; background: var(--white);
             border-radius: 50%; display: none; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border: 1px solid #eee; transition: 0.3s;
+            cursor: pointer; z-index: 1001; box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.05); transition: var(--transition-smooth);
+            font-size: 24px; color: var(--text-primary);
         }
-        .nav-arrow:hover { transform: translateY(-50%) scale(1.1); background: var(--accent); color: #fff; }
-        .arrow-l { left: 30px; } .arrow-r { right: 30px; }
-        @media (min-width: 1100px) { .nav-arrow { display: flex; } }
+        .nav-control:hover { background: var(--accent); color: var(--white); transform: translateY(-50%) scale(1.1); box-shadow: var(--shadow-lg); }
+        .control-prev { left: 40px; }
+        .control-next { right: 40px; }
+        @media (min-width: 1200px) { .nav-control { display: flex; } }
 
-        /* Slider Engine */
-        .main-container {
+        /* ========================================
+        ENGINE DO SLIDER (CENTRALIZADO)
+        ========================================
+        */
+        .deck-wrapper {
             display: flex;
             overflow-x: auto;
             overflow-y: hidden;
             height: 100vh;
             align-items: center;
-            padding: 0 calc(50vw - (var(--card-w) / 2));
+            padding: 0 calc(50vw - (var(--card-width) / 2)); /* Garante centralização perfeita */
             scroll-snap-type: x mandatory;
-            gap: 25px;
+            gap: 30px;
             scroll-behavior: smooth;
+            perspective: 1000px;
         }
-        .main-container::-webkit-scrollbar { display: none; }
+        .deck-wrapper::-webkit-scrollbar { display: none; }
 
-        /* Card UI */
+        /* ========================================
+        ESTILO DOS CARDS
+        ========================================
+        */
         .card {
-            flex: 0 0 var(--card-w);
-            height: var(--card-h);
-            background: #fff;
-            border-radius: 32px;
-            padding: 45px 35px;
+            flex: 0 0 var(--card-width);
+            height: var(--card-height);
+            background: var(--white);
+            border-radius: 40px;
+            padding: 50px 40px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             scroll-snap-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.02);
-            transition: 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: var(--transition-smooth);
+            position: relative;
+            opacity: 0.6;
+            transform: scale(0.9) translateY(20px);
         }
         
-        .tag { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: block; }
-        h2 { font-size: clamp(28px, 5vw, 36px); font-weight: 800; line-height: 1.1; margin-bottom: 15px; letter-spacing: -1px; }
-        p.desc { font-size: 16px; line-height: 1.5; color: #86868b; }
+        .card.active { opacity: 1; transform: scale(1) translateY(0); box-shadow: var(--shadow-lg); }
 
-        .btn-action {
-            background: #1d1d1f; color: #fff; padding: 22px;
-            border-radius: 18px; border: none; font-size: 15px;
-            font-weight: 700; cursor: pointer; width: 100%;
+        .card-header .kicker { font-size: 11px; font-weight: 900; color: var(--accent); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 20px; display: block; }
+        .card-header h2 { font-size: clamp(30px, 4vw, 40px); font-weight: 800; line-height: 1.05; letter-spacing: -1.5px; color: var(--text-primary); margin-bottom: 20px; }
+        .card-header .description { font-size: 17px; line-height: 1.6; color: var(--text-secondary); font-weight: 400; }
+
+        .card-footer { display: flex; flex-direction: column; gap: 15px; }
+
+        .btn-main {
+            background: var(--text-primary); color: var(--white); padding: 22px; border-radius: 20px;
+            border: none; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
+        .btn-main:active { transform: scale(0.96); }
 
-        /* Modal / Bottom Sheet */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        /* ========================================
+        ESTILO DOS MODAIS (HIGH-END)
+        ========================================
+        */
+        .overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             z-index: 2000; display: none; align-items: flex-end; justify-content: center;
         }
-        .modal-overlay.active { display: flex; }
+        .overlay.active { display: flex; }
 
         .modal-sheet {
-            background: #fff; width: 100%; max-width: 550px;
-            border-radius: 35px 35px 0 0; padding: 40px 30px;
-            transform: translateY(100%); transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--white); width: 100%; max-width: 600px;
+            border-radius: 40px 40px 0 0; padding: 50px 40px;
+            transform: translateY(100%); transition: var(--transition-smooth);
             max-height: 90vh; overflow-y: auto; position: relative;
         }
-        .modal-overlay.active .modal-sheet { transform: translateY(0); }
+        .overlay.active .modal-sheet { transform: translateY(0); }
 
-        .info-card { background: #f5f5f7; padding: 20px; border-radius: 20px; margin-bottom: 15px; }
-        .info-card b { display: block; font-size: 14px; color: var(--accent); margin-bottom: 8px; text-transform: uppercase; }
-        .info-card p { font-size: 14px; color: #444; line-height: 1.6; }
+        .sheet-header { margin-bottom: 35px; border-bottom: 1px solid #f2f2f7; padding-bottom: 25px; }
+        .sheet-header h3 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
 
-        /* Estilo Contrato */
-        .contract-box { 
-            background: #fffdf5; border: 1px solid #d4c391; padding: 25px; 
-            border-radius: 15px; font-family: monospace; font-size: 12px; line-height: 1.5;
+        .content-block { margin-bottom: 25px; }
+        .content-block b { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .content-block p { font-size: 15px; line-height: 1.7; color: #444; }
+
+        .critical-item { background: #fff1f1; border-left: 5px solid #ff3b30; padding: 20px; border-radius: 15px; margin-bottom: 15px; }
+        .critical-item b { color: #ff3b30; }
+
+        .price-card { background: #f5f5f7; padding: 25px; border-radius: 25px; margin-top: 15px; border: 1px solid transparent; transition: 0.3s; }
+        .price-card.featured { border-color: var(--accent); background: #f0f7ff; }
+
+        .contract-text { 
+            background: #fafafc; border: 1px dashed #d1d1d6; padding: 30px; 
+            border-radius: 20px; font-family: 'Courier New', monospace; font-size: 13px; color: #3a3a3c;
         }
 
-        /* Cores de Fundo Dinâmicas */
-        body.s0 { background: #f5f5f7; } body.s1 { background: #eef4ff; }
-        body.s2 { background: #fff1f1; } body.s3 { background: #f0fdf4; }
-        body.s4 { background: #fdfaf0; } body.s5 { background: #f8fafc; }
-        body.s6 { background: #1c1c1e; }
+        /* Cores Dinâmicas de Fundo */
+        body.theme-0 { background-color: #f5f5f7; }
+        body.theme-1 { background-color: #eef4ff; }
+        body.theme-2 { background-color: #fff1f1; }
+        body.theme-3 { background-color: #f0fdf4; }
+        body.theme-4 { background-color: #fdfaf0; }
+        body.theme-5 { background-color: #f8fafc; }
+        body.theme-6 { background-color: #1c1c1e; }
         
-        .card-dark { background: #2c2c2e; color: #fff; border: none; }
-        .card-dark .btn-action { background: #fff; color: #000; }
-        .card-dark p.desc { color: #a1a1a6; }
+        .card-final { background: #2c2c2e; color: #fff; border: none; }
+        .card-final h2, .card-final .kicker { color: #fff; }
+        .card-final .btn-main { background: #fff; color: #000; }
 
-        .close-x { position: absolute; top: 25px; right: 25px; font-size: 20px; cursor: pointer; font-weight: bold; color: #888; }
+        .close-trigger { position: absolute; top: 30px; right: 30px; width: 35px; height: 35px; background: #f2f2f7; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; color: #86868b; z-index: 10; }
+
+        .footer-note { position: fixed; bottom: 20px; width: 100%; text-align: center; font-size: 9px; letter-spacing: 3px; color: #a1a1a6; font-weight: 700; pointer-events: none; }
     </style>
 </head>
-<body class="s0">
+<body class="theme-0">
 
-    <div class="header-nav">
-        <div class="dots" id="dots">
+    <div class="top-interface">
+        <div class="brand-logo">WL SYSTEM // 2026</div>
+        <div class="progress-dots" id="dotGroup">
             <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
             <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
         </div>
     </div>
 
-    <div class="nav-arrow arrow-l" onclick="moveSlider(-1)">‹</div>
-    <div class="nav-arrow arrow-r" onclick="moveSlider(1)">›</div>
+    <div class="nav-control control-prev" onclick="manualScroll(-1)">‹</div>
+    <div class="nav-control control-next" onclick="manualScroll(1)">›</div>
 
-    <div class="main-container" id="slider">
-        <div class="card">
-            <div><span class="tag">Diagnóstico WL</span><h2>Digital Strategy Cavallini</h2><p class="desc">A análise profunda dos riscos e gargalos que travam o faturamento da unidade São Francisco.</p></div>
-            <button class="btn-action" onclick="openModal('m0')">Ver Riscos Críticos</button>
+    <div class="deck-wrapper" id="slider">
+        
+        <div class="card active" id="c0">
+            <div class="card-header">
+                <span class="kicker">Análise de Risco</span>
+                <h2>Diagnóstico Estratégico</h2>
+                <p class="description">Identificamos os pontos cegos que estão fazendo o Mercado Cavallini perder clientes para a concorrência digital agora mesmo.</p>
+            </div>
+            <div class="card-footer">
+                <button class="btn-main" onclick="showModal('m0')">Ver Riscos Críticos <span>→</span></button>
+            </div>
         </div>
-        <div class="card">
-            <div><span class="tag">Pilar 01</span><h2>📍 O Imã da Rodovia</h2><p class="desc">Como interceptar o fluxo da R. Hilário Hilgert e converter motoristas em clientes.</p></div>
-            <button class="btn-action" onclick="openModal('m1')">Ver Plano de Captura</button>
+
+        <div class="card" id="c1">
+            <div class="card-header">
+                <span class="kicker">Pilar Localização</span>
+                <h2>📍 O Imã da Rodovia</h2>
+                <p class="description">Sua posição na entrada de Farroupilha é um ativo subutilizado. Vamos transformar o fluxo da R. Hilário Hilgert em faturamento.</p>
+            </div>
+            <div class="card-footer">
+                <button class="btn-main" onclick="showModal('m1')">Plano de Captura</button>
+            </div>
         </div>
-        <div class="card">
-            <div><span class="tag">Pilar 02</span><h2>🥖 Mercearia & Padaria</h2><p class="desc">O fim das filas e a valorização do mix essencial para a vizinhança imediata.</p></div>
-            <button class="btn-action" onclick="openModal('m2')">Ver Estratégia de Mix</button>
+
+        <div class="card" id="c2">
+            <div class="card-header">
+                <span class="kicker">Pilar Produto</span>
+                <h2>🥖 Padaria e Mercearia</h2>
+                <p class="description">Foco na conveniência extrema. Posicionaremos o Cavallini como a solução rápida que evita as filas dos grandes atacados.</p>
+            </div>
+            <div class="card-footer">
+                <button class="btn-main" onclick="showModal('m2')">Ver Diferenciais</button>
+            </div>
         </div>
-        <div class="card">
-            <div><span class="tag">Pilar 03</span><h2>📲 CRM & WhatsApp</h2><p class="desc">Transformando moradores em uma base de dados ativa e lucrativa.</p></div>
-            <button class="btn-action" onclick="openModal('m3')">Ver Automação</button>
+
+        <div class="card" id="c3">
+            <div class="card-header">
+                <span class="kicker">Pilar Digital</span>
+                <h2>📲 CRM WhatsApp</h2>
+                <p class="description">Chega de panfletos de papel. Vamos construir uma base de dados ativa dos moradores do bairro São Francisco.</p>
+            </div>
+            <div class="card-footer">
+                <button class="btn-main" onclick="showModal('m3')">Ver Fluxo de Vendas</button>
+            </div>
         </div>
-        <div class="card">
-            <div><span class="tag">Compromisso</span><h2>🤝 Garantia WL</h2><p class="desc">Nossa cláusula de exclusividade regional: foco total no Cavallini.</p></div>
-            <button class="btn-action" onclick="openModal('m4')">Ver Termos de Blindagem</button>
+
+        <div class="card" id="c4">
+            <div class="card-header">
+                <span class="kicker">Segurança Executiva</span>
+                <h2>🤝 Exclusividade Regional</h2>
+                <p class="description">Nossa metodologia é exclusiva. Ao fechar com a WL System, você blinda seu território contra a concorrência local.</p>
+            </div>
+            <div class="card-footer">
+                <button class="btn-main" onclick="showModal('m4')">Ver Garantias WL</button>
+            </div>
         </div>
-        <div class="card">
-            <div><span class="tag">Investimento</span><h2>💰 Planos de Escala</h2><p class="desc">Modelos de negócio para dominar o bairro São Francisco.</p></div>
-            <button class="btn-action" onclick="openModal('m5')">Ver Tabelas de Valores</button>
+
+        <div class="card" id="c5">
+            <div class="card-header">
+                <span class="kicker">Escalabilidade</span>
+                <h2>💰 Planos de Negócio</h2>
+                <p class="description">Estruturas de investimento desenhadas para o tamanho atual e para o futuro do Mercado Cavallini.</p>
+            </div>
+            <div class="card-footer">
+                <button class="btn-main" onclick="showModal('m5')">Tabela de Valores</button>
+            </div>
         </div>
-        <div class="card card-dark">
-            <div><span class="tag">Formalização</span><h2>Acordo de Parceria</h2><p class="desc">O próximo passo para a transformação digital do Mercado Cavallini.</p></div>
-            <button class="btn-action" onclick="openModal('m6')">Visualizar Minuta</button>
+
+        <div class="card card-final" id="c6">
+            <div class="card-header">
+                <span class="kicker">O Próximo Passo</span>
+                <h2>Acordo de Parceria</h2>
+                <p class="description">Formalização da nossa consultoria estratégica para início imediato das otimizações na unidade São Francisco.</p>
+            </div>
+            <div class="card-footer">
+                <button class="btn-main" onclick="showModal('m6')">Visualizar Minuta Digital</button>
+            </div>
         </div>
+
     </div>
 
-    <div class="modal-overlay" id="overlay" onclick="closeModal(event)">
+    <div class="overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
         <div class="modal-sheet">
-            <div class="close-x" onclick="forceClose()">✕</div>
-            <div id="modal-content"></div>
+            <div class="close-trigger" onclick="closeModal()">✕</div>
+            <div id="modalDynamicContent">
+                </div>
         </div>
     </div>
+
+    <div class="footer-note">DESENVOLVIDO PELA WL SYSTEM ESTRATÉGIA // FARROUPILHA RS</div>
 
     <script>
-        const slider = document.getElementById('slider');
-        const body = document.body;
-        const dots = document.querySelectorAll('.dot');
-
-        const data = {
-            m0: `<h2>Riscos Críticos Detectados</h2>
-                <div class="info-card"><b>⚠️ Diagnóstico das 3 Fotos</b><p>Atualmente o Google exibe apenas 3 fotos de rua/fachada. O cliente não vê o interior, não vê o hortifruti e não vê a organização, gerando desconfiança.</p></div>
-                <div class="info-card"><b>⚠️ Incoerência de Horários</b><p>Os horários digitais não batem com a operação física. Clientes perdem a viagem e o mercado perde a venda.</p></div>
-                <div class="info-card"><b>⚠️ Hortifruti Invisível</b><p>Por ser um setor enxuto, ele está 100% oculto nas buscas locais, impedindo que o morador escolha o Cavallini para a "compras de emergência".</p></div>`,
-            m1: `<h2>📍 Estratégia de Rodovia</h2>
-                <div class="info-card"><b>Domínio Local</b><p>Otimização SEO para termos como "Gelo", "Cerveja Gelada" e "Conveniência" para quem entra na cidade.</p></div>
-                <div class="info-card"><b>Google Maps Pro</b><p>Posicionamento no TOP 3 da região para buscas de conveniência rápida.</p></div>`,
-            m2: `<h2>🥖 Mercearia & Padaria</h2>
-                <div class="info-card"><b>Gatilho de Fluxo</b><p>Estratégia de avisos de "Pão Quente" para criar hábito de visita diária dos moradores locais.</p></div>
-                <div class="info-card"><b>Sem Filas</b><p>Posicionamento do Cavallini como a alternativa rápida aos grandes supermercados do centro.</p></div>`,
-            m3: `<h2>📲 CRM & WhatsApp</h2>
-                <div class="info-card"><b>Base de Vizinhos</b><p>Captura e gestão de contatos dos moradores do São Francisco para ofertas semanais sem custo de panfletagem.</p></div>
-                <div class="info-card"><b>Venda Direta</b><p>Transformar o WhatsApp em um canal ativo de pedidos e consultas de estoque.</p></div>`,
-            m4: `<h2>🤝 Garantia WL System</h2>
-                <div class="info-card"><b>Exclusividade Regional</b><p>A WL System não atende nenhum outro mercado num raio de 2km do Cavallini. Somos seus parceiros exclusivos no bairro.</p></div>
-                <div class="info-card"><b>Propriedade dos Ativos</b><p>Todas as fotos, artes e contas configuradas são 100% de propriedade do Mercado Cavallini.</p></div>`,
-            m5: `<h2>💰 Planos de Investimento</h2>
-                <div class="info-card"><b>⭐ Plano Essential</b><p>Gestão de Google Maps + Fotos Mensais Profissionais.<br><b>R$ 650,00/mês</b></p></div>
-                <div class="info-card" style="border: 2px solid var(--accent)"><b>⭐⭐⭐ Plano ELITE</b><p>Google Maps Pro + CRM WhatsApp + Tráfego Pago Local + Consultoria Estratégica Mensal.<br><b>R$ 2.400,00/mês</b></p></div>`,
-            m6: `<h2>Minuta de Parceria</h2>
-                <div class="contract-box">
-                    <b>MEMORANDUM DE ENTENDIMENTO DIGITAL</b><br><br>
-                    • OBJETO: Consultoria e Implementação Estratégica WL System.<br>
-                    • EXCLUSIVIDADE: Raio de 2km (São Francisco).<br>
-                    • RESCISÃO: Livre após 90 dias de implementação inicial.<br>
-                    • SUPORTE: Atendimento prioritário via Canal WL.<br><br>
-                    WL SYSTEM | MERCADO CAVALLINI
+        /* ========================================
+        LOGICA DE CONTEÚDO (CONSOLIDAÇÃO)
+        ========================================
+        */
+        const modalDB = {
+            m0: `
+                <div class="sheet-header"><h3>Diagnóstico de Riscos</h3></div>
+                <div class="critical-item">
+                    <b>❌ RISCO 01: Invisibilidade de Produto</b>
+                    <p>O Google exibe apenas 3 fotos de fachada de 2021. O cliente atual não vê a qualidade do seu Hortifruti nem a organização interna, escolhendo o concorrente que "parece" melhor online.</p>
                 </div>
-                <button class="btn-action" style="background:#25d366; margin-top:15px">✅ Aceitar e Iniciar Agora</button>`
+                <div class="critical-item">
+                    <b>❌ RISCO 02: Horários Fantasmas</b>
+                    <p>Dados desatualizados fazem o motorista da rodovia não parar por dúvida se está aberto, desviando o fluxo para o centro.</p>
+                </div>
+                <div class="content-block">
+                    <b>✅ A SOLUÇÃO</b>
+                    <p>Digitalização completa do inventário visual, correção de SEO local e gestão de reputação imediata.</p>
+                </div>`,
+            m1: `
+                <div class="sheet-header"><h3>📍 Estratégia de Rodovia</h3></div>
+                <div class="content-block">
+                    <b>INTERCEPTAÇÃO DE FLUXO</b>
+                    <p>Configuração de anúncios geolocalizados para termos como "Gelo", "Carvão" e "Cerveja Gelada" para usuários num raio de 1km da R. Hilário Hilgert.</p>
+                </div>
+                <div class="content-block">
+                    <b>SEO DE CONVENIÊNCIA</b>
+                    <p>Garantir que o Cavallini apareça no TOP 3 do Google Maps quando o turista ou morador buscar por "Mercado aberto agora".</p>
+                </div>`,
+            m2: `
+                <div class="sheet-header"><h3>🥖 Padaria & Mercearia</h3></div>
+                <div class="content-block">
+                    <b>O GATILHO DO PÃO QUENTE</b>
+                    <p>Utilizaremos o horário de saída da fornada como ímã digital. O cliente recebe a notificação e passa no mercado no caminho de casa.</p>
+                </div>
+                <div class="content-block">
+                    <b>VANTAGEM COMPETITIVA</b>
+                    <p>Posicionar o Cavallini como o "Mercado de 5 Minutos". Resolvemos o que falta na despensa sem o estresse do estacionamento dos atacados.</p>
+                </div>`,
+            m3: `
+                <div class="sheet-header"><h3>📲 CRM & WhatsApp</h3></div>
+                <div class="content-block">
+                    <b>O FIM DOS PANFLETOS</b>
+                    <p>Criação de uma lista de transmissão segmentada por vizinhança. Informação direta, custo zero de impressão e alta taxa de conversão.</p>
+                </div>
+                <div class="content-block">
+                    <b>AUTOMAÇÃO DE OFERTAS</b>
+                    <p>Agenda programada de promoções semanais (Quarta do Hortifruti, Sábado do Churrasco) direto no celular do cliente.</p>
+                </div>`,
+            m4: `
+                <div class="sheet-header"><h3>🤝 Garantia WL System</h3></div>
+                <div class="content-block">
+                    <b>BLINDAGEM REGIONAL</b>
+                    <p>Contrato de exclusividade: Não atenderemos nenhum outro mercado no bairro São Francisco. Nossa energia é focada 100% no seu domínio de mercado.</p>
+                </div>
+                <div class="content-block">
+                    <b>PROPRIEDADE DE ATIVOS</b>
+                    <p>Todo o material produzido (fotos, vídeos, artes) e as contas configuradas são de propriedade jurídica do Mercado Cavallini.</p>
+                </div>`,
+            m5: `
+                <div class="sheet-header"><h3>💰 Tabela de Investimento</h3></div>
+                <div class="price-card">
+                    <b>PLANO ESSENTIAL</b>
+                    <p>Gestão de Google Business + Correção de Dados + 1 Sessão Fotográfica/mês.<br><strong>R$ 650,00/mês</strong></p>
+                </div>
+                <div class="price-card featured">
+                    <b>PLANO ELITE (Recomendado)</b>
+                    <p>Essential + Gestão de WhatsApp CRM + Tráfego Pago (Anúncios) + Suporte 24h para emergências de horários.<br><strong>R$ 2.400,00/mês</strong></p>
+                </div>`,
+            m6: `
+                <div class="sheet-header"><h3>Minuta de Parceria</h3></div>
+                <div class="contract-text">
+                    <strong>INSTRUMENTO PARTICULAR DE CONSULTORIA ESTRATÉGICA</strong><br><br>
+                    PARTES: WL SYSTEM ESTRATÉGIA e MERCADO CAVALLINI UNIDADE SÃO FRANCISCO.<br><br>
+                    1. OBJETO: Implementação do ecossistema digital de vendas.<br>
+                    2. EXCLUSIVIDADE: Raio de 2km (Bairro São Francisco).<br>
+                    3. VIGÊNCIA: 12 meses (Rescisão livre após 90 dias).<br>
+                    4. CONFIDENCIALIDADE: Dados de faturamento e base de clientes protegidos por LGPD.
+                </div>
+                <button class="btn-main" style="background:#25d366; margin-top:20px;">✅ ACEITAR E INICIAR IMEDIATAMENTE</button>`
         };
 
+        /* ========================================
+        LOGICA DE INTERAÇÃO (ENGINE)
+        ========================================
+        */
+        const slider = document.getElementById('slider');
+        const dots = document.querySelectorAll('.dot');
+        const cards = document.querySelectorAll('.card');
+        const body = document.body;
+
+        // Gerenciamento de Scroll e Estados
         slider.addEventListener('scroll', () => {
-            const index = Math.round(slider.scrollLeft / (window.innerWidth * 0.88));
-            dots.forEach((d, i) => d.classList.toggle('active', i === index));
-            body.className = `s${index}`;
+            const cardWidth = cards[0].offsetWidth + 30;
+            const index = Math.round(slider.scrollLeft / cardWidth);
+            
+            // Atualiza Dots
+            dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+            
+            // Atualiza Cards (Animação de Foco)
+            cards.forEach((card, i) => card.classList.toggle('active', i === index));
+            
+            // Atualiza Tema Global
+            body.className = `theme-${index}`;
         });
 
-        function moveSlider(dir) {
-            const step = window.innerWidth * 0.85;
-            slider.scrollBy({ left: dir * step, behavior: 'smooth' });
+        // Navegação Manual
+        function manualScroll(direction) {
+            const cardWidth = cards[0].offsetWidth + 30;
+            slider.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
         }
 
-        function openModal(id) {
-            document.getElementById('modal-content').innerHTML = data[id];
-            document.getElementById('overlay').classList.add('active');
+        // Sistema de Modal
+        function showModal(id) {
+            document.getElementById('modalDynamicContent').innerHTML = modalDB[id];
+            document.getElementById('modalOverlay').classList.add('active');
         }
 
-        function closeModal(e) { if(e.target.id === 'overlay') forceClose(); }
-        function forceClose() { document.getElementById('overlay').classList.remove('active'); }
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function handleOverlayClick(e) {
+            if (e.target.id === 'modalOverlay') closeModal();
+        }
+
+        // Navegação por Teclado
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') manualScroll(1);
+            if (e.key === 'ArrowLeft') manualScroll(-1);
+            if (e.key === 'Escape') closeModal();
+        });
     </script>
 </body>
 </html>
