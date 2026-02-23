@@ -3,420 +3,426 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WL System Pro | Consultoria Cavallini</title>
+    <title>WL System | Executive Strategy</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* ========================================
-        SISTEMA DE DESIGN WL SYSTEM 
-        ========================================
+        /* ================================================================
+        SISTEMA DE DESIGN: WL SYSTEM EXECUTIVE
+        ================================================================
         */
         :root {
-            --bg-default: #f5f5f7;
+            /* Paleta de Cores de Alto Contraste */
+            --bg-deep: #000000;
+            --bg-surface: #1c1c1e;
+            --bg-card: #ffffff;
             --accent: #0071e3;
-            --accent-soft: rgba(0, 113, 227, 0.1);
-            --text-primary: #1d1d1f;
-            --text-secondary: #86868b;
-            --white: #ffffff;
-            --card-width: clamp(320px, 90vw, 440px);
-            --card-height: clamp(580px, 82vh, 750px);
-            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
-            --shadow-lg: 0 20px 60px rgba(0,0,0,0.1);
+            --accent-hover: #0077ed;
+            --text-main: #1d1d1f;
+            --text-muted: #86868b;
+            --border-light: rgba(0,0,0,0.08);
+            
+            /* Grid e Dimensões */
+            --card-w: clamp(340px, 90vw, 460px);
+            --card-h: clamp(500px, 78vh, 720px);
+            --border-radius: 30px;
+            
+            /* Animações */
+            --curve: cubic-bezier(0.16, 1, 0.3, 1);
+            --timing: 0.6s;
         }
 
-        /* Reset & Base */
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-        
-        body { 
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-default);
+        /* Reset de Alta Precisão */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-font-smoothing: antialiased; 
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--white);
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            color: var(--text-primary);
-            transition: background-color 0.8s ease;
+            transition: background-color 0.8s var(--curve);
         }
 
-        /* ========================================
-        NAVEGAÇÃO E PROGRESSO
-        ========================================
+        /* ================================================================
+        INTERFACE DE NAVEGAÇÃO (UI)
+        ================================================================
         */
-        .top-interface {
-            position: fixed; top: 0; left: 0; width: 100%; height: 80px;
+        .glass-header {
+            position: fixed; top: 0; width: 100%; height: 90px;
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; z-index: 1000;
+            padding: 0 50px; z-index: 2000;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
         }
 
-        .brand-logo { font-weight: 900; font-size: 14px; letter-spacing: 2px; color: var(--text-primary); text-transform: uppercase; }
+        .brand {
+            font-weight: 800; font-size: 15px; letter-spacing: 3px;
+            text-transform: uppercase; color: #fff;
+        }
 
-        .progress-dots { display: flex; gap: 10px; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; background: #d2d2d7; transition: var(--transition-smooth); cursor: pointer; }
-        .dot.active { background: var(--accent); width: 28px; border-radius: 10px; }
+        .step-indicator {
+            display: flex; gap: 12px; align-items: center;
+        }
 
-        /* ========================================
-        CONTROLES LATERAIS (PC)
-        ========================================
-        */
-        .nav-control {
+        .step-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: rgba(255,255,255,0.2); transition: var(--timing) var(--curve);
+        }
+
+        .step-dot.active {
+            background: var(--accent); width: 25px; border-radius: 10px;
+        }
+
+        /* Setas de Controle Executivo */
+        .nav-btn {
             position: fixed; top: 50%; transform: translateY(-50%);
-            width: 60px; height: 60px; background: var(--white);
-            border-radius: 50%; display: none; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 1001; box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(0,0,0,0.05); transition: var(--transition-smooth);
-            font-size: 24px; color: var(--text-primary);
+            width: 55px; height: 55px; border-radius: 50%;
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: none; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 1500; color: #fff;
+            transition: all 0.3s var(--curve);
         }
-        .nav-control:hover { background: var(--accent); color: var(--white); transform: translateY(-50%) scale(1.1); box-shadow: var(--shadow-lg); }
-        .control-prev { left: 40px; }
-        .control-next { right: 40px; }
-        @media (min-width: 1200px) { .nav-control { display: flex; } }
 
-        /* ========================================
-        ENGINE DO SLIDER (CENTRALIZADO)
-        ========================================
+        .nav-btn:hover { background: var(--accent); border-color: var(--accent); scale: 1.1; }
+        .nav-btn.prev { left: 40px; }
+        .nav-btn.next { right: 40px; }
+        @media (min-width: 1024px) { .nav-btn { display: flex; } }
+
+        /* ================================================================
+        ENGINE DE SCROLL CENTRALIZADO (UX)
+        ================================================================
         */
-        .deck-wrapper {
+        .viewport-slider {
             display: flex;
             overflow-x: auto;
             overflow-y: hidden;
             height: 100vh;
             align-items: center;
-            padding: 0 calc(50vw - (var(--card-width) / 2)); /* Garante centralização perfeita */
+            padding: 0 calc(50vw - (var(--card-w) / 2));
             scroll-snap-type: x mandatory;
-            gap: 30px;
+            gap: 40px;
             scroll-behavior: smooth;
-            perspective: 1000px;
         }
-        .deck-wrapper::-webkit-scrollbar { display: none; }
 
-        /* ========================================
-        ESTILO DOS CARDS
-        ========================================
+        .viewport-slider::-webkit-scrollbar { display: none; }
+
+        /* ================================================================
+        CARDS: ESTRUTURA E HIERARQUIA
+        ================================================================
         */
-        .card {
-            flex: 0 0 var(--card-width);
-            height: var(--card-height);
-            background: var(--white);
-            border-radius: 40px;
-            padding: 50px 40px;
+        .biz-card {
+            flex: 0 0 var(--card-w);
+            height: var(--card-h);
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 55px 45px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             scroll-snap-align: center;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(0,0,0,0.03);
-            transition: var(--transition-smooth);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            transition: transform 0.8s var(--curve), opacity 0.8s var(--curve);
             position: relative;
-            opacity: 0.6;
-            transform: scale(0.9) translateY(20px);
+            transform: scale(0.85);
+            opacity: 0.3;
         }
-        
-        .card.active { opacity: 1; transform: scale(1) translateY(0); box-shadow: var(--shadow-lg); }
 
-        .card-header .kicker { font-size: 11px; font-weight: 900; color: var(--accent); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 20px; display: block; }
-        .card-header h2 { font-size: clamp(30px, 4vw, 40px); font-weight: 800; line-height: 1.05; letter-spacing: -1.5px; color: var(--text-primary); margin-bottom: 20px; }
-        .card-header .description { font-size: 17px; line-height: 1.6; color: var(--text-secondary); font-weight: 400; }
+        .biz-card.active { transform: scale(1); opacity: 1; }
 
-        .card-footer { display: flex; flex-direction: column; gap: 15px; }
-
-        .btn-main {
-            background: var(--text-primary); color: var(--white); padding: 22px; border-radius: 20px;
-            border: none; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+        .card-label {
+            font-size: 12px; font-weight: 700; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px;
+            display: block;
         }
-        .btn-main:active { transform: scale(0.96); }
 
-        /* ========================================
-        ESTILO DOS MODAIS (HIGH-END)
-        ========================================
+        .biz-card h2 {
+            font-size: clamp(32px, 4vw, 42px); font-weight: 800;
+            color: var(--text-main); line-height: 1.05; letter-spacing: -1.5px;
+            margin-bottom: 25px;
+        }
+
+        .biz-card p.intro {
+            font-size: 17px; line-height: 1.6; color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .btn-cta {
+            background: var(--text-main); color: #fff;
+            padding: 22px; border-radius: 18px; border: none;
+            font-size: 15px; font-weight: 700; cursor: pointer;
+            width: 100%; transition: all 0.3s var(--curve);
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+        }
+
+        .btn-cta:hover { background: var(--accent); transform: translateY(-3px); }
+
+        /* Dark Card Variation */
+        .biz-card.dark { background: var(--bg-surface); color: #fff; }
+        .biz-card.dark h2 { color: #fff; }
+        .biz-card.dark .btn-cta { background: #fff; color: #000; }
+
+        /* ================================================================
+        MODAL SYSTEM: BOTTOM SHEET EXECUTIVE
+        ================================================================
         */
-        .overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            z-index: 2000; display: none; align-items: flex-end; justify-content: center;
-        }
-        .overlay.active { display: flex; }
-
-        .modal-sheet {
-            background: var(--white); width: 100%; max-width: 600px;
-            border-radius: 40px 40px 0 0; padding: 50px 40px;
-            transform: translateY(100%); transition: var(--transition-smooth);
-            max-height: 90vh; overflow-y: auto; position: relative;
-        }
-        .overlay.active .modal-sheet { transform: translateY(0); }
-
-        .sheet-header { margin-bottom: 35px; border-bottom: 1px solid #f2f2f7; padding-bottom: 25px; }
-        .sheet-header h3 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
-
-        .content-block { margin-bottom: 25px; }
-        .content-block b { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-        .content-block p { font-size: 15px; line-height: 1.7; color: #444; }
-
-        .critical-item { background: #fff1f1; border-left: 5px solid #ff3b30; padding: 20px; border-radius: 15px; margin-bottom: 15px; }
-        .critical-item b { color: #ff3b30; }
-
-        .price-card { background: #f5f5f7; padding: 25px; border-radius: 25px; margin-top: 15px; border: 1px solid transparent; transition: 0.3s; }
-        .price-card.featured { border-color: var(--accent); background: #f0f7ff; }
-
-        .contract-text { 
-            background: #fafafc; border: 1px dashed #d1d1d6; padding: 30px; 
-            border-radius: 20px; font-family: 'Courier New', monospace; font-size: 13px; color: #3a3a3c;
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            z-index: 3000; display: none; align-items: flex-end; justify-content: center;
         }
 
-        /* Cores Dinâmicas de Fundo */
-        body.theme-0 { background-color: #f5f5f7; }
-        body.theme-1 { background-color: #eef4ff; }
-        body.theme-2 { background-color: #fff1f1; }
-        body.theme-3 { background-color: #f0fdf4; }
-        body.theme-4 { background-color: #fdfaf0; }
-        body.theme-5 { background-color: #f8fafc; }
-        body.theme-6 { background-color: #1c1c1e; }
-        
-        .card-final { background: #2c2c2e; color: #fff; border: none; }
-        .card-final h2, .card-final .kicker { color: #fff; }
-        .card-final .btn-main { background: #fff; color: #000; }
+        .modal-overlay.open { display: flex; }
 
-        .close-trigger { position: absolute; top: 30px; right: 30px; width: 35px; height: 35px; background: #f2f2f7; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; color: #86868b; z-index: 10; }
+        .bottom-sheet {
+            background: #fff; width: 100%; max-width: 650px;
+            border-radius: 40px 40px 0 0; padding: 60px 45px;
+            transform: translateY(100%); transition: transform 0.5s var(--curve);
+            max-height: 85vh; overflow-y: auto; color: var(--text-main);
+        }
 
-        .footer-note { position: fixed; bottom: 20px; width: 100%; text-align: center; font-size: 9px; letter-spacing: 3px; color: #a1a1a6; font-weight: 700; pointer-events: none; }
+        .modal-overlay.open .bottom-sheet { transform: translateY(0); }
+
+        .sheet-handle {
+            width: 45px; height: 6px; background: #e2e2e7;
+            border-radius: 10px; margin: -30px auto 35px;
+        }
+
+        .data-block { margin-bottom: 30px; }
+        .data-block h4 { 
+            font-size: 13px; text-transform: uppercase; color: var(--accent);
+            margin-bottom: 12px; letter-spacing: 1px;
+        }
+
+        .risk-item {
+            background: #fff1f1; border-left: 4px solid #ff3b30;
+            padding: 20px; border-radius: 15px; margin-bottom: 15px;
+        }
+
+        .price-table {
+            border: 1px solid var(--border-light); border-radius: 20px;
+            padding: 25px; margin-top: 20px;
+        }
+
+        /* ================================================================
+        FOOTER & MISC
+        ================================================================
+        */
+        .legal-footer {
+            position: fixed; bottom: 25px; width: 100%; text-align: center;
+            font-size: 10px; color: rgba(255,255,255,0.3);
+            letter-spacing: 4px; pointer-events: none; text-transform: uppercase;
+        }
+
+        /* Ambient Backgrounds */
+        body.s0 { background: #0c0c0d; }
+        body.s1 { background: #0a1122; }
+        body.s2 { background: #1a0a0a; }
+        body.s3 { background: #0a1a0e; }
+        body.s4 { background: #1a150a; }
+        body.s5 { background: #141416; }
+        body.s6 { background: #000000; }
+
     </style>
 </head>
-<body class="theme-0">
+<body class="s0">
 
-    <div class="top-interface">
-        <div class="brand-logo">WL SYSTEM // 2026</div>
-        <div class="progress-dots" id="dotGroup">
-            <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
-            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
-        </div>
-    </div>
+    <header class="glass-header">
+        <div class="brand">WL System <span style="font-weight: 300; opacity: 0.5;">Strategy</span></div>
+        <nav class="step-indicator" id="stepGroup">
+            <div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div>
+            <div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div>
+        </nav>
+    </header>
 
-    <div class="nav-control control-prev" onclick="manualScroll(-1)">‹</div>
-    <div class="nav-control control-next" onclick="manualScroll(1)">›</div>
+    <div class="nav-btn prev" onclick="navigate(-1)">←</div>
+    <div class="nav-btn next" onclick="navigate(1)">→</div>
 
-    <div class="deck-wrapper" id="slider">
+    <main class="viewport-slider" id="mainDeck">
         
-        <div class="card active" id="c0">
-            <div class="card-header">
-                <span class="kicker">Análise de Risco</span>
-                <h2>Diagnóstico Estratégico</h2>
-                <p class="description">Identificamos os pontos cegos que estão fazendo o Mercado Cavallini perder clientes para a concorrência digital agora mesmo.</p>
-            </div>
-            <div class="card-footer">
-                <button class="btn-main" onclick="showModal('m0')">Ver Riscos Críticos <span>→</span></button>
-            </div>
-        </div>
+        <article class="biz-card active">
+            <header>
+                <span class="card-label">Strategic Analysis</span>
+                <h2>Diagnóstico de Impacto</h2>
+                <p class="intro">Identificamos os gargalos operacionais e digitais que impedem a escala do faturamento do Mercado Cavallini no bairro São Francisco.</p>
+            </header>
+            <button class="btn-cta" onclick="toggleModal('m0')">Analisar Riscos Críticos</button>
+        </article>
 
-        <div class="card" id="c1">
-            <div class="card-header">
-                <span class="kicker">Pilar Localização</span>
-                <h2>📍 O Imã da Rodovia</h2>
-                <p class="description">Sua posição na entrada de Farroupilha é um ativo subutilizado. Vamos transformar o fluxo da R. Hilário Hilgert em faturamento.</p>
-            </div>
-            <div class="card-footer">
-                <button class="btn-main" onclick="showModal('m1')">Plano de Captura</button>
-            </div>
-        </div>
+        <article class="biz-card">
+            <header>
+                <span class="card-label">Geo-Intelligence</span>
+                <h2>O Imã da Rodovia</h2>
+                <p class="intro">Sua posição na Hilário Hilgert não é apenas um endereço, é um ativo financeiro. Vamos converter o fluxo passivo em lucro ativo.</p>
+            </header>
+            <button class="btn-cta" onclick="toggleModal('m1')">Plano de Aquisição</button>
+        </article>
 
-        <div class="card" id="c2">
-            <div class="card-header">
-                <span class="kicker">Pilar Produto</span>
-                <h2>🥖 Padaria e Mercearia</h2>
-                <p class="description">Foco na conveniência extrema. Posicionaremos o Cavallini como a solução rápida que evita as filas dos grandes atacados.</p>
-            </div>
-            <div class="card-footer">
-                <button class="btn-main" onclick="showModal('m2')">Ver Diferenciais</button>
-            </div>
-        </div>
+        <article class="biz-card">
+            <header>
+                <span class="card-label">Core Business</span>
+                <h2>Mix de Conveniência</h2>
+                <p class="intro">Posicionamento estratégico do setor de Padaria e Mercearia para capturar a compra de reposição rápida da vizinhança.</p>
+            </header>
+            <button class="btn-cta" onclick="toggleModal('m2')">Ver Diferenciais</button>
+        </article>
 
-        <div class="card" id="c3">
-            <div class="card-header">
-                <span class="kicker">Pilar Digital</span>
-                <h2>📲 CRM WhatsApp</h2>
-                <p class="description">Chega de panfletos de papel. Vamos construir uma base de dados ativa dos moradores do bairro São Francisco.</p>
-            </div>
-            <div class="card-footer">
-                <button class="btn-main" onclick="showModal('m3')">Ver Fluxo de Vendas</button>
-            </div>
-        </div>
+        <article class="biz-card">
+            <header>
+                <span class="card-label">Digital Ecosystem</span>
+                <h2>CRM & WhatsApp</h2>
+                <p class="intro">Construção de ativos próprios. Saia do algoritmo das redes sociais e fale diretamente no bolso do seu cliente local.</p>
+            </header>
+            <button class="btn-cta" onclick="toggleModal('m3')">Estratégia de Retenção</button>
+        </article>
 
-        <div class="card" id="c4">
-            <div class="card-header">
-                <span class="kicker">Segurança Executiva</span>
-                <h2>🤝 Exclusividade Regional</h2>
-                <p class="description">Nossa metodologia é exclusiva. Ao fechar com a WL System, você blinda seu território contra a concorrência local.</p>
-            </div>
-            <div class="card-footer">
-                <button class="btn-main" onclick="showModal('m4')">Ver Garantias WL</button>
-            </div>
-        </div>
+        <article class="biz-card">
+            <header>
+                <span class="card-label">WL Trust</span>
+                <h2>Garantia de Mercado</h2>
+                <p class="intro">Contrato de exclusividade territorial. Nossa inteligência será usada apenas para o crescimento do Cavallini na região.</p>
+            </header>
+            <button class="btn-cta" onclick="toggleModal('m4')">Termos de Blindagem</button>
+        </article>
 
-        <div class="card" id="c5">
-            <div class="card-header">
-                <span class="kicker">Escalabilidade</span>
-                <h2>💰 Planos de Negócio</h2>
-                <p class="description">Estruturas de investimento desenhadas para o tamanho atual e para o futuro do Mercado Cavallini.</p>
-            </div>
-            <div class="card-footer">
-                <button class="btn-main" onclick="showModal('m5')">Tabela de Valores</button>
-            </div>
-        </div>
+        <article class="biz-card">
+            <header>
+                <span class="card-label">Revenue Growth</span>
+                <h2>Planos de Escala</h2>
+                <p class="intro">Modelos de investimento focados em ROI e sustentabilidade a longo prazo para a marca Cavallini.</p>
+            </header>
+            <button class="btn-cta" onclick="toggleModal('m5')">Tabela de Negócios</button>
+        </article>
 
-        <div class="card card-final" id="c6">
-            <div class="card-header">
-                <span class="kicker">O Próximo Passo</span>
-                <h2>Acordo de Parceria</h2>
-                <p class="description">Formalização da nossa consultoria estratégica para início imediato das otimizações na unidade São Francisco.</p>
-            </div>
-            <div class="card-footer">
-                <button class="btn-main" onclick="showModal('m6')">Visualizar Minuta Digital</button>
-            </div>
-        </div>
+        <article class="biz-card dark">
+            <header>
+                <span class="card-label">The Next Step</span>
+                <h2>Protocolo de Início</h2>
+                <p class="intro">Formalização da parceria estratégica e cronograma de implementação das primeiras 72 horas de otimização.</p>
+            </header>
+            <button class="btn-cta" onclick="toggleModal('m6')">Minuta Contratual</button>
+        </article>
 
-    </div>
+    </main>
 
-    <div class="overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
-        <div class="modal-sheet">
-            <div class="close-trigger" onclick="closeModal()">✕</div>
-            <div id="modalDynamicContent">
+    <section class="modal-overlay" id="modalOverlay" onclick="handleOutside(event)">
+        <div class="bottom-sheet">
+            <div class="sheet-handle"></div>
+            <div id="dynamicContent">
                 </div>
         </div>
-    </div>
+    </section>
 
-    <div class="footer-note">DESENVOLVIDO PELA WL SYSTEM ESTRATÉGIA // FARROUPILHA RS</div>
+    <footer class="legal-footer">Farroupilha • Rio Grande do Sul • 2026</footer>
 
     <script>
-        /* ========================================
-        LOGICA DE CONTEÚDO (CONSOLIDAÇÃO)
-        ========================================
+        /* ================================================================
+        LOGICA EXECUTIVA: DADOS E INTERAÇÃO
+        ================================================================
         */
-        const modalDB = {
-            m0: `
-                <div class="sheet-header"><h3>Diagnóstico de Riscos</h3></div>
-                <div class="critical-item">
-                    <b>❌ RISCO 01: Invisibilidade de Produto</b>
-                    <p>O Google exibe apenas 3 fotos de fachada de 2021. O cliente atual não vê a qualidade do seu Hortifruti nem a organização interna, escolhendo o concorrente que "parece" melhor online.</p>
-                </div>
-                <div class="critical-item">
-                    <b>❌ RISCO 02: Horários Fantasmas</b>
-                    <p>Dados desatualizados fazem o motorista da rodovia não parar por dúvida se está aberto, desviando o fluxo para o centro.</p>
-                </div>
-                <div class="content-block">
-                    <b>✅ A SOLUÇÃO</b>
-                    <p>Digitalização completa do inventário visual, correção de SEO local e gestão de reputação imediata.</p>
-                </div>`,
-            m1: `
-                <div class="sheet-header"><h3>📍 Estratégia de Rodovia</h3></div>
-                <div class="content-block">
-                    <b>INTERCEPTAÇÃO DE FLUXO</b>
-                    <p>Configuração de anúncios geolocalizados para termos como "Gelo", "Carvão" e "Cerveja Gelada" para usuários num raio de 1km da R. Hilário Hilgert.</p>
-                </div>
-                <div class="content-block">
-                    <b>SEO DE CONVENIÊNCIA</b>
-                    <p>Garantir que o Cavallini apareça no TOP 3 do Google Maps quando o turista ou morador buscar por "Mercado aberto agora".</p>
-                </div>`,
-            m2: `
-                <div class="sheet-header"><h3>🥖 Padaria & Mercearia</h3></div>
-                <div class="content-block">
-                    <b>O GATILHO DO PÃO QUENTE</b>
-                    <p>Utilizaremos o horário de saída da fornada como ímã digital. O cliente recebe a notificação e passa no mercado no caminho de casa.</p>
-                </div>
-                <div class="content-block">
-                    <b>VANTAGEM COMPETITIVA</b>
-                    <p>Posicionar o Cavallini como o "Mercado de 5 Minutos". Resolvemos o que falta na despensa sem o estresse do estacionamento dos atacados.</p>
-                </div>`,
-            m3: `
-                <div class="sheet-header"><h3>📲 CRM & WhatsApp</h3></div>
-                <div class="content-block">
-                    <b>O FIM DOS PANFLETOS</b>
-                    <p>Criação de uma lista de transmissão segmentada por vizinhança. Informação direta, custo zero de impressão e alta taxa de conversão.</p>
-                </div>
-                <div class="content-block">
-                    <b>AUTOMAÇÃO DE OFERTAS</b>
-                    <p>Agenda programada de promoções semanais (Quarta do Hortifruti, Sábado do Churrasco) direto no celular do cliente.</p>
-                </div>`,
-            m4: `
-                <div class="sheet-header"><h3>🤝 Garantia WL System</h3></div>
-                <div class="content-block">
-                    <b>BLINDAGEM REGIONAL</b>
-                    <p>Contrato de exclusividade: Não atenderemos nenhum outro mercado no bairro São Francisco. Nossa energia é focada 100% no seu domínio de mercado.</p>
-                </div>
-                <div class="content-block">
-                    <b>PROPRIEDADE DE ATIVOS</b>
-                    <p>Todo o material produzido (fotos, vídeos, artes) e as contas configuradas são de propriedade jurídica do Mercado Cavallini.</p>
-                </div>`,
-            m5: `
-                <div class="sheet-header"><h3>💰 Tabela de Investimento</h3></div>
-                <div class="price-card">
-                    <b>PLANO ESSENTIAL</b>
-                    <p>Gestão de Google Business + Correção de Dados + 1 Sessão Fotográfica/mês.<br><strong>R$ 650,00/mês</strong></p>
-                </div>
-                <div class="price-card featured">
-                    <b>PLANO ELITE (Recomendado)</b>
-                    <p>Essential + Gestão de WhatsApp CRM + Tráfego Pago (Anúncios) + Suporte 24h para emergências de horários.<br><strong>R$ 2.400,00/mês</strong></p>
-                </div>`,
-            m6: `
-                <div class="sheet-header"><h3>Minuta de Parceria</h3></div>
-                <div class="contract-text">
-                    <strong>INSTRUMENTO PARTICULAR DE CONSULTORIA ESTRATÉGICA</strong><br><br>
-                    PARTES: WL SYSTEM ESTRATÉGIA e MERCADO CAVALLINI UNIDADE SÃO FRANCISCO.<br><br>
-                    1. OBJETO: Implementação do ecossistema digital de vendas.<br>
-                    2. EXCLUSIVIDADE: Raio de 2km (Bairro São Francisco).<br>
-                    3. VIGÊNCIA: 12 meses (Rescisão livre após 90 dias).<br>
-                    4. CONFIDENCIALIDADE: Dados de faturamento e base de clientes protegidos por LGPD.
-                </div>
-                <button class="btn-main" style="background:#25d366; margin-top:20px;">✅ ACEITAR E INICIAR IMEDIATAMENTE</button>`
-        };
-
-        /* ========================================
-        LOGICA DE INTERAÇÃO (ENGINE)
-        ========================================
-        */
-        const slider = document.getElementById('slider');
-        const dots = document.querySelectorAll('.dot');
-        const cards = document.querySelectorAll('.card');
+        const deck = document.getElementById('mainDeck');
+        const dots = document.querySelectorAll('.step-dot');
+        const cards = document.querySelectorAll('.biz-card');
         const body = document.body;
 
-        // Gerenciamento de Scroll e Estados
-        slider.addEventListener('scroll', () => {
-            const cardWidth = cards[0].offsetWidth + 30;
-            const index = Math.round(slider.scrollLeft / cardWidth);
+        // Content Database - Robustez de Informação
+        const database = {
+            m0: `
+                <div class="data-block">
+                    <h4>Riscos Críticos de Visibilidade</h4>
+                    <div class="risk-item">
+                        <strong style="color:#ff3b30">Inexistência Visual:</strong>
+                        <p>O Google exibe fotos de 5 anos atrás. O cliente não vê o seu novo balcão de padaria nem o hortifruti atualizado, gerando perda imediata de autoridade.</p>
+                    </div>
+                    <div class="risk-item">
+                        <strong style="color:#ff3b30">Abandono Digital:</strong>
+                        <p>Horários incorretos e falta de respostas no perfil oficial sinalizam ao cliente que o estabelecimento pode estar fechado ou descuidado.</p>
+                    </div>
+                </div>`,
+            m1: `
+                <div class="data-block">
+                    <h4>📍 Geo-Targeting Rodoviário</h4>
+                    <p>Implementação de anúncios baseados em geofencing (raio de 1km) para interceptar pesquisas de conveniência de quem entra em Farroupilha pela R. Hilário Hilgert.</p>
+                </div>`,
+            m2: `
+                <div class="data-block">
+                    <h4>🥖 Estratégia de Mix</h4>
+                    <p>Foco na "Compra de Conveniência": Pão quente e itens essenciais de mercearia posicionados digitalmente para evitar que o morador vá ao centro.</p>
+                </div>`,
+            m3: `
+                <div class="data-block">
+                    <h4>📲 CRM Direto</h4>
+                    <p>Transformação de tráfego orgânico em listas de transmissão segmentadas. O cliente recebe a oferta no WhatsApp e o ticket médio sobe 22% em média.</p>
+                </div>`,
+            m4: `
+                <div class="data-block">
+                    <h4>🤝 Cláusula de Exclusividade</h4>
+                    <p>A WL System compromete-se a não prestar consultoria para qualquer outro mercado no bairro São Francisco por 12 meses, garantindo sua dominância total.</p>
+                </div>`,
+            m5: `
+                <div class="data-block">
+                    <h4>💰 Estrutura de Investimento</h4>
+                    <div class="price-table">
+                        <p><strong>Plano Essential:</strong> Google Maps + Fotos Profissionais: <b>R$ 650,00</b></p>
+                        <hr style="margin:15px 0; opacity:0.1">
+                        <p><strong>Plano ELITE:</strong> Básico + CRM + Tráfego Pago + Gestão de Crise: <b>R$ 2.400,00</b></p>
+                    </div>
+                </div>`,
+            m6: `
+                <div class="data-block">
+                    <h4>Protocolo de Parceria</h4>
+                    <p style="font-family:monospace; background:#f5f5f7; padding:20px; border-radius:10px; font-size:12px;">
+                        • OBJETIVO: Domínio Digital Bairro São Francisco<br>
+                        • EXCLUSIVIDADE: Raio de 2km<br>
+                        • RESCISÃO: Livre após período de setup (90 dias)<br>
+                        • SUPORTE: Canal direto WL Priority
+                    </p>
+                    <button class="btn-cta" style="margin-top:25px; background:#25d366">✅ Confirmar Início e Gerar Contrato</button>
+                </div>`
+        };
+
+        // Engine de Scroll e Feedback Visual
+        deck.addEventListener('scroll', () => {
+            const cardWidth = cards[0].offsetWidth + 40;
+            const index = Math.round(deck.scrollLeft / cardWidth);
             
-            // Atualiza Dots
             dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
-            
-            // Atualiza Cards (Animação de Foco)
             cards.forEach((card, i) => card.classList.toggle('active', i === index));
-            
-            // Atualiza Tema Global
-            body.className = `theme-${index}`;
+            body.className = `s${index}`;
         });
 
-        // Navegação Manual
-        function manualScroll(direction) {
-            const cardWidth = cards[0].offsetWidth + 30;
-            slider.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+        // Navegação por Botões e Teclado
+        function navigate(dir) {
+            const cardWidth = cards[0].offsetWidth + 40;
+            deck.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
         }
 
-        // Sistema de Modal
-        function showModal(id) {
-            document.getElementById('modalDynamicContent').innerHTML = modalDB[id];
-            document.getElementById('modalOverlay').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('modalOverlay').classList.remove('active');
-        }
-
-        function handleOverlayClick(e) {
-            if (e.target.id === 'modalOverlay') closeModal();
-        }
-
-        // Navegação por Teclado
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') manualScroll(1);
-            if (e.key === 'ArrowLeft') manualScroll(-1);
-            if (e.key === 'Escape') closeModal();
+            if (e.key === 'ArrowRight') navigate(1);
+            if (e.key === 'ArrowLeft') navigate(-1);
+            if (e.key === 'Escape') toggleModal();
         });
+
+        // Modal Logic
+        function toggleModal(id) {
+            const overlay = document.getElementById('modalOverlay');
+            if (id) {
+                document.getElementById('dynamicContent').innerHTML = database[id];
+                overlay.classList.add('open');
+            } else {
+                overlay.classList.remove('open');
+            }
+        }
+
+        function handleOutside(e) {
+            if (e.target.id === 'modalOverlay') toggleModal();
+        }
     </script>
 </body>
 </html>
